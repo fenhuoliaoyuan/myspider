@@ -15,6 +15,7 @@ headers = {
 }
 acounts = 0
 for page in range(int(start_page),int(end_page)+1):
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++第{}页下载开始'.format(page))
     URL = URL_1[0] + 'page=%d'%page + URL_1[1]
     mid = re.compile('com/(\d+)/?').findall(URL)[0]
     # print(mid)
@@ -27,7 +28,8 @@ for page in range(int(start_page),int(end_page)+1):
         'order': 'pubdate',
         'jsonp': 'jsonp'
     }
-    url_api = 'https://api.bilibili.com/x/space/arc/search?mid=8366990&ps=30&tid=0&pn=1&keyword=&order=pubdate&jsonp=jsonp'
+    url_api = 'https://api.bilibili.com/x/space/arc/search?'
+    # print(url_api)
     json_response = requests.get(url=url_api,headers=headers,params=params).json()
     list_video = json_response["data"]["list"]["vlist"]
     for v in list_video:
@@ -36,3 +38,4 @@ for page in range(int(start_page),int(end_page)+1):
         acounts += 1
         print('第{}个文件下载开始'.format(acounts))
         os.system('youtube-dl ' + url_video)
+    print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++第{}页下载结束'.format(page))
