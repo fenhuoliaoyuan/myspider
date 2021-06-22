@@ -1,27 +1,29 @@
 import random
+
+# redis连接
 from redis import Redis
 conn = Redis(host='localhost', port=6379, db=0)
 conn_1 = Redis(host='localhost', port=6379,db=1)
 conn_ip = Redis(host='localhost', port=6379,db=1)
-# conn.sadd('name','134')
-def set_socks4_proxy():
-    return {
-        # 'http': 'socks4://127.0.0.1:1080',
-        'https': 'socks4://127.0.0.1:1080'
-    }
 
+# mongodb连接
+import pymongo
+#使用Faker库随机生成虚假header
+from faker import Faker
 
-def request_headers():
-    return {
-        'User-Agent': random.choice(user_agent_list),
-        # 'Accept-Language': 'en-US,en;q=0.5',
-        'Connection': 'keep-alive',
-        # 'Accept-Encoding': 'gzip, deflate',
-        'accept': 'application/json, text/plain, */*',
-        # 'accept-encoding': 'gzip, deflate, br',
-        # 'accept-language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
-        'cache-control': 'no-cache'
-    }
+client = pymongo.MongoClient(host='localhost', port=27017)
+
+db = client.lagou
+collection = db['spider']
+
+db_Tencent = client.Tencent
+spider_tencent = db_Tencent['spider_tencent']
+# MONGO_URL : ''
+
+# 生成随机头
+fake = Faker()
+headers ={'User-Agent':fake.user_agent()}
+
 
 
 user_agent_list = (
