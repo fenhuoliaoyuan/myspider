@@ -29,6 +29,10 @@ class get_img():
             'user-agent': random.choice(config.get_ua()),
         }
         bro.get(url=self.url)
+        time.sleep(3)
+        bro.find_element_by_xpath('//button[@class="Button Modal-closeButton Button--plain"]').click()
+        time.sleep(2)
+        bro.find_element_by_xpath('//button[@class="Button AppHeader-login Button--blue"]').click()
         click_used_password = bro.find_element_by_xpath('//div[@class="SignFlow-tab"]')
         click_used_password.click()
         time.sleep(2)
