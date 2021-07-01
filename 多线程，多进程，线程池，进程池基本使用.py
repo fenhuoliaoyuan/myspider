@@ -44,11 +44,11 @@ if __name__ == '__main__':
     # t4.start()
 
     # 线程池
-    with ThreadPoolExecutor(50) as th:
-        for i in range(100):
-            th.submit(fn('第{}个线程'.format(i)))
+    # with ThreadPoolExecutor(50) as th:
+    #     for i in range(100):
+    #         th.submit(fn,'第{}个线程'.format(i))
 
     # 进程池
-    # with ProcessPoolExecutor(50) as th:
-    #     for i in range(100):
-    #         th.submit(fn('第{}个进程'.format(i)))
+    with ProcessPoolExecutor(50) as th:
+        for i in range(100):
+            th.submit(fn,'第{}个进程'.format(i))
