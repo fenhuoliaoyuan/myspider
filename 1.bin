@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"><!-- dl/dl -->
+	<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Title -->
+        <title>Information | AW catalog</title>
+        <!-- Styles -->
+		<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+        <link href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Theme Styles -->
+        <link href="/assets/css/main.css" rel="stylesheet">
+        <link href="/assets/css/custom.css" rel="stylesheet">
+		<style> br:nth-child(2n + 2) { display: none; } h2 {font-size: 50px;} strong {font-weight: 300; color: #FEBA00;}</style>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body class="error-page page-error-404">
+        <!-- Page Content -->
+        <div class="page-container page-error">
+			<div class="page-content" id="message">
+				<!-- Page Inner -->
+				<div class="page-inner">
+					<div id="main-wrapper" class="container">
+						<div class="row">
+							<div class="col-md-6 center">
+								<h2 class="awgrad">Information</h2>
+								<p>It seems like you are using an outdated browser or are you using our site from another application.</p>
+								</div>
+						</div><!-- Row -->
+					</div><!-- Main Wrapper -->
+				</div><!-- /Page Inner -->
+			</div><!-- /Page Content -->
+        </div>
+        <!-- Javascripts -->
+        <script src="/assets/plugins/pace/pace.min.js"></script>
+    </body>
+</html>
