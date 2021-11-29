@@ -242,7 +242,7 @@ def get_ips():
 
 
 
-
+path_ffmpeg = r'C:\软件安装\ffmpeg-N-104495-g945b2dcc63-win64-lgpl\ffmpeg-N-104495-g945b2dcc63-win64-lgpl\bin'
 def get_user(a, b):
     # n = 0
     m = 0
@@ -380,7 +380,16 @@ def get_jiajin(page_jiajin):
                                                 conn.sadd('ts_url', ts_id)
                                                 pbar.update(1)
                                 pbar.close()
-                                # 该视频下载完成后添加键值
+                                try:
+                                    os.chdir(path_ffmpeg)
+                                    os.system("ffmpeg -i \"{}\" -acodec copy -vcodec copy -f mp4 \"{}\"".
+                                              format(path_mp4,path_mp4.replace(".ts",'.mp4')))
+                                    if os.path.exists(path_mp4.replace(".ts",'.mp4')) and os.path.exists(path_mp4):
+                                        os.remove(path_mp4)
+                                        print("文件转换成mp4完成，删除ts完成")
+                                    # 该视频下载完成后添加键值
+                                except:
+                                    pass
                                 print(
                                     '————————————————————————————————————————视频{}---{}下载成功'.format(user_name_, video_name))
                                 list_all.append(user_name_ + video_name)
@@ -481,6 +490,12 @@ def get_jiajin(page_jiajin):
                                             conn.sadd('ts_url', ts_id)
                                             pbar.update(1)
                                 pbar.close()
+                                os.chdir(path_ffmpeg)
+                                os.system("ffmpeg -i \"{}\" -acodec copy -vcodec copy -f mp4 \"{}\"".
+                                          format(path_mp4, path_mp4.replace(".ts", '.mp4')))
+                                if os.path.exists(path_mp4.replace(".ts", '.mp4')) and os.path.exists(path_mp4):
+                                    os.remove(path_mp4)
+                                    print("文件转换成mp4完成，删除ts完成")
                                 # 该视频下载完成后添加键值
                                 print(
                                     '————————————————————————————————————————视频{}---{}下载成功'.format(user_name_, video_name))
@@ -599,6 +614,12 @@ def get_jiajin(page_jiajin):
                                                 conn.sadd('ts_url', ts_id)
                                                 pbar.update(1)
                                 pbar.close()
+                                os.chdir(path_ffmpeg)
+                                os.system("ffmpeg -i \"{}\" -acodec copy -vcodec copy -f mp4 \"{}\"".
+                                          format(path_mp4, path_mp4.replace(".ts", '.mp4')))
+                                if os.path.exists(path_mp4.replace(".ts", '.mp4')) and os.path.exists(path_mp4):
+                                    os.remove(path_mp4)
+                                    print("文件转换成mp4完成，删除ts完成")
                                 # 该视频下载完成后添加键值
                                 print(
                                     '————————————————————————————————————————视频{}---{}下载成功'.format(user_name_, video_name))
@@ -699,11 +720,10 @@ if __name__ == '__main__':
                 # a = random.choice(url_list)
                 tp.submit(get_jiajin, str(page_jiajin))
                 # url_list.remove(a)
-        from tschangetomp4 import tschangetomp4
-        tschangetomp4()
         for i in list_all:
             print(i)
         print('更新视频个数为'+str(len(list_all)))
+
         from smtplib邮件通知 import my_send_email
         my_send_email("标题：91porn用户视频更新",
                       "<h1>更新视频个数为：{}<h1>更新的视频文件详情列表为：<br>{}".format(len(list_all),'<br>'.join(list_all)),
