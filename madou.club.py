@@ -1,0 +1,134 @@
+import requests
+import os
+import random
+from lxml import etree
+import re
+from Crypto.Cipher import AES
+from base64 import b64decode
+import 类库
+from UA头 import get_ua_list
+from 类库 import get_ts, get_page_text
+from concurrent.futures import ThreadPoolExecutor
+from 转码 import fanhao_zhangma
+headers_list = get_ua_list()
+
+def get_cryptor(url_m3u8):
+    # url_m3u8 = 'https://kingdom-b.alonestreaming.com/hls/LABUvA1N2MSC7uTh8Fi1Pg/1634916782/16000/16665/16665.m3u8'
+    response = requests.get(url=url_m3u8, headers=random.choice(headers_list))
+    m3u8_txt = response.text
+    # print()
+    ts_list = []
+    url_key = ''
+    for line in m3u8_txt.split('\n'):
+        # print(line)
+        if 'URI' in line:
+            url_key = url_qianzui + re.compile('URI="(.*)"').findall(line)[0]
+            # iv = b64decode(re.compile('IV=(.*)').findall(line)[0])
+            # print(url_key)
+        elif 'ts' in line:
+            ts_list.append(url_qianzui + line)
+    if len(url_key) == 0:
+        return ts_list
+    else:
+        key_byte = requests.get(url=url_key, headers=random.choice(headers_list)).content
+        cryptor = AES.new(key_byte, AES.MODE_CBC,b'\x00' * 16)
+        return cryptor, ts_list
+
+
+def download_1(ts_url):
+    name_ts = ts_url.split('/')[-1]
+    if not os.path.exists('C:\测试\\' + name_ts):
+        ts = get_ts(ts_url, acount=0)
+        if ts is not None:
+            ts = ts.content
+
+            # name_ts = name_ts.split('.')[0]
+            ts_open = cryptor.decrypt(ts)
+            # dict_ts[name_ts]= ts_open
+            with open('C:\测试\\' + name_ts, 'wb') as wt:
+                wt.write(ts_open)
+                print(name_ts)
+            # with open('./jable_第一个mp4.mp4', 'ab') as fp:
+            #     fp.write(ts_open)
+            #     print('{}下载成功'.format(name_ts))
+
+
+def download_2(ts_url):
+    name_ts = ts_url.split('/')[-1]
+    if not os.path.exists('C:\测试\\' + name_ts):
+        ts = get_ts(ts_url, acount=0)
+        if ts is not None:
+            ts = ts.content
+            # name_ts = name_ts.split('.')[0]
+            # ts_open = cryptor.decrypt(ts)
+            # dict_ts[name_ts]= ts_open
+            with open('C:\测试\\' + name_ts, 'wb') as wt:
+                wt.write(ts)
+                print(name_ts)
+
+
+if __name__ == '__main__':
+    import time
+
+    start_time = int(time.time())
+    # path_name = r'E:\番号\FSDSS-003 肩負著片商希望的FALENO專屬新人美乃雀AV出道.ts'
+    path_name = r'C:\ghs\国产原创\夏晴子\鲍鱼的胜利 性与苦痛的愉虐游戏 再度启动.ts'
+    if not os.path.exists(path_name) and not os.path.exists(path_name.replace('F', 'C')) and not os.path.exists \
+                (path_name.replace('E', 'C')) and not os.path.exists(path_name.replace('C', 'F')) and not os.path.exists \
+                (path_name.replace('E', 'F')) and not os.path.exists(path_name.replace('C', 'E')) and not os.path.exists \
+                (path_name.replace('F', 'E')):
+        list_ts_file = ''
+        url_m3u8 = 'https://dash.madou.club/videos/61a4b01b1eaef84862b04a7c/index.m3u8?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJ2aWV3IiwiaWF0IjoxNjM4OTYwMjUxLCJleHAiOjE2Mzg5NjAzNTF9.H75bWbj1eNHKNwzBgKn4pvcCyW_DGsrleeblxuAw7jA'
+        # 'https://2xingav.com/video/m3u8/20a770ddca8b5b14dc545e5a2277feb9dddb720a.m3u8?video_server=lacdn'
+        # 'https://c.s1c.xyz/videos/20a770ddca8b5b14dc545e5a2277feb9dddb720a/p00015.ts'
+        # url_qianzui = '/'.join(url_m3u8.split('/')[:-1]) + '/'
+        url_qianzui = ''
+        if len(list(get_cryptor(url_m3u8))) == 2:
+            cryptor, ts_list = get_cryptor(url_m3u8)
+            while len(list_ts_file) < len(ts_list):
+                with ThreadPoolExecutor(10) as tp:
+                    for ts_url in ts_list:
+                        tp.submit(download_1, ts_url)
+                    list_ts_file = os.listdir('C:\测试')
+            print('ts下载完成')
+        else:
+            ts_list = get_cryptor(url_m3u8)
+            while len(list_ts_file) < len(ts_list):
+                with ThreadPoolExecutor(10) as tp:
+                    for ts_url in ts_list:
+                        tp.submit(download_2, ts_url)
+                        list_ts_file = os.listdir('C:\测试')
+            print('ts下载完成')
+        # dict_ts = sorted(dict_ts)
+        # with open('第一个MP4.mp4','ab') as rb:
+        #     for i in dict_ts:
+        #         rb.write(dict_ts[i])
+        #         print(i+'写入成功')
+        # list_ts_file = os.listdir('./测试')
+        with open(path_name, 'ab') as ab:
+            for i in [j.replace(url_qianzui, '') for j in ts_list]:
+                with open('C:\测试\\' + i, 'rb') as rb:
+                    ab.write(rb.read())
+            print(path_name + '合并完成')
+        # with open(path_name, 'ab') as ab:
+        #     for i in sorted([int(i.split('.')[0]) for i in list_ts_file]):
+        #         with open('C:\测试\\' + str(i) + '.ts', 'rb') as rb:
+        #             ab.write(rb.read())
+        #     print(path_name+'合并完成')
+        for j in ['C:\测试\\' + i for i in list_ts_file]:
+            # print(j)
+            os.remove(j)
+        print('ts删除完成')
+        fanhao_zhangma("E:\番号")
+        fanhao_zhangma("C:\番号")
+        fanhao_zhangma("F:\番号")
+        fanhao_zhangma("C:\ghs\国产原创\夏晴子")
+        end_time = int(time.time())
+        time_all = end_time - start_time
+        print('执行时间为：' + str(time_all) + 's')
+        from smtplib邮件通知 import my_send_email
+        my_send_email("标题：91porn用户视频更新",
+                      "<h1>更新视频：<br>{}".join(path_name.split('\\')[-1].replace(".ts",'')),
+                      "2319423737@qq.com",
+                      "2319423737@qq.com", )
+        print('更新完成,邮件发送完成，等待八个小时继续更新...')
