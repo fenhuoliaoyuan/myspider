@@ -28,6 +28,7 @@ def get_url(url):
         # 加上youtube-dl命令
         # url_video_cmd = 'youtube-dl ' + 'https://cn.pornhub.com' + href
         url_video_cmd = 'yt-dlp -f \"bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best\" ' + 'https://cn.pornhub.com' + href
+        # url_video_cmd = 'youtube-dl -f \"bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best\" ' + 'https://cn.pornhub.com' + href
         # print(url_video,acounts)
         url_list_cmd.append(url_video_cmd)
     return url_list_cmd
@@ -36,9 +37,10 @@ def get_url(url):
 if __name__ == '__main__':
     # URL  = input('例如https://cn.pornhub.com/model/hongkongdoll/videos\n输入你要下载的用户视频列表地址  ：')
     # URL = 'https://cn.pornhub.com/model/hongkongdoll/videos'
-    URL = 'https://cn.pornhub.com/model/hongkongdoll/videos'
+    # URL = 'https://cn.pornhub.com/model/3d-hentaigames/videos'
+    URL = 'https://cn.pornhub.com/model/rondoudoumedia/videos'
     # dir_name = input("输入你要存储视频的目录路径 ：")https://cn.pornhub.com/model/uuuujapan/videos
-    dir_name = r'D:\hhh\pornhub'
+    dir_name = r'G:\ghs\pornhub'
     # page_all = input("输入要下载的视频列表的总页数：")
     page_all = '1'
     if not os.path.exists(dir_name):

@@ -22,4 +22,9 @@ def fanhao_zhangma(path_dir):
     #         os.remove(path_mp4)
     #         print("文件转换成mp4完成，删除ts完成")
 if __name__ == '__main__':
-    fanhao_zhangma("E:\番号")
+    # fanhao_zhangma("E:\番号")
+    # fanhao_zhangma(r'D:\hhh\\国产\\Miohot')
+    fanhao_zhangma(r'C:\\番号')
+    fanhao_zhangma(r'G:\\番号')
+    fanhao_zhangma(r'F:\\番号')
+    # fanhao_zhangma()

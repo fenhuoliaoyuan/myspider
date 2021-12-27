@@ -246,6 +246,8 @@ def get_user(a, b):
     for page in range(a, b + 1):
         print('第{}页解析'.format(page))
         url_jiajin_ = 'https://0316.workarea2.live/v.php?category=rf&viewtype=basic&page={}'.format(page)
+        # url_jiajin_ = 'https://www.91porn.com/v.php?category=top&viewtype=basic&page={}'.format(page)
+        # url_jiajin_ = 'https://0316.workarea2.live/v.php?category=top&m=-1&viewtype=basic&page={}'.format(page)
         # page_text_jiajin = requests.get(url=url_jiajin_,headers=headers).text
         page_text_jiajin = get_page_text_jiajin(url_jiajin_=url_jiajin_, acount=0)
         if page_text_jiajin is not None:
@@ -255,7 +257,7 @@ def get_user(a, b):
                 url_jiajin_detail = div.xpath('./a/@href')[0]
                 user = div.xpath('./text()')[5]
                 user = user.strip()
-                path_ = r'G:\ghs\91porn' + '\\' + user
+                path_ = r'G:\ghs\91porn' + '\\' + user.replace('*',"_")
                 if not os.path.exists(path_):
                     os.mkdir(path_)
                     print(user)
@@ -309,7 +311,7 @@ def get_jiajin(page_jiajin):
             url_jiajin_detail = div.xpath('./a/@href')[0]
             viewkey = re.compile('viewkey=(.*?)&page').findall(url_jiajin_detail)[0]
             user_name_ = div.xpath('./text()')[5]
-            user_name_ = user_name_.strip().replace('.', '')
+            user_name_ = user_name_.strip().replace('.', '').replace('*','_')
             video_name_ = div.xpath('./a/span[@class="video-title title-truncate m-t-5"]/text()')[0].replace \
                 (':', '').replace('!', '').replace('|', '').replace('*', '').replace('?', '').replace('[原创]',
                                                                                                       '').strip()
@@ -337,8 +339,8 @@ def get_jiajin(page_jiajin):
                         VID = re.compile('id=VID.*?>(\d+)<').findall(page_text_detail)[0]
                         if len(VID) == 0:
                             VID = re.compile('VID=(d+)').findall(page_text_detail)[0]
-                        # m3u8_url = 'https://ccn.killcovid2021.com//m3u8/{}/{}.m3u8'.format(VID, VID)
-                        # m3u8_url = 'https://ccn.killcovid2021.com//m3u8/{}/{}.m3u8'.format(VID, VID)
+                        # m3u8_url = 'https://cdn.workgreat14.live//m3u8/{}/{}.m3u8'.format(VID, VID)
+                        # m3u8_url = 'https://cdn.workgreat14.live//m3u8/{}/{}.m3u8'.format(VID, VID)
                         m3u8_url = m3u8_qianzui + '//m3u8/{}/{}.m3u8'.format(VID, VID)
                         print(m3u8_url)
                         m3u8 = get_m3u8(m3u8_url, acount=0)
@@ -350,7 +352,7 @@ def get_jiajin(page_jiajin):
                                 ts_list = []
                                 for ts_ in m3u8.split('\n'):
                                     if 'ts' in ts_:
-                                        # url_ts = 'https://ccn.killcovid2021.com//m3u8/{}/'.format(VID) + ts_
+                                        # url_ts = 'https://cdn.workgreat14.live//m3u8/{}/'.format(VID) + ts_
                                         url_ts = m3u8_qianzui + '//m3u8/{}/'.format(VID) + ts_
                                         ts_list.append(url_ts)
                                 # print('ts数量为{}'.format(len(ts_list)))
@@ -402,7 +404,7 @@ def get_jiajin(page_jiajin):
                                     # print(st)
                                     st = re.compile("src=\'(.*)\' type").findall(st_)[0]
                                     # url_video_mp4 = 'https://cdn.workgreat14.live//mp43/' + st.split('/')[-1]
-                                    url_video_mp4 = 'https://ccn.killcovid2021.com' + '//mp43/' + st.split('/')[-1]
+                                    url_video_mp4 = 'https://cdn.workgreat14.live' + '//mp43/' + st.split('/')[-1]
                                     print(url_video_mp4)
                                     if not os.path.exists(path_mp4):
                                         tq = tqdm(total=1)
@@ -445,7 +447,7 @@ def get_jiajin(page_jiajin):
                         VID = re.compile('id=VID.*?>(\d+)<').findall(page_text_detail)[0]
                         if len(VID) == 0:
                             VID = re.compile('VID=(d+)').findall(page_text_detail)[0]
-                        # m3u8_url = 'https://ccn.killcovid2021.com//m3u8/{}/{}.m3u8'.format(VID, VID)
+                        # m3u8_url = 'https://cdn.workgreat14.live//m3u8/{}/{}.m3u8'.format(VID, VID)
                         m3u8_url =m3u8_qianzui+ '//m3u8/{}/{}.m3u8'.format(VID, VID)
                         print(m3u8_url)
                         m3u8 = get_m3u8(m3u8_url, acount=0)
@@ -508,7 +510,7 @@ def get_jiajin(page_jiajin):
                                     # print(st)
                                     st = re.compile("src=\'(.*)\' type").findall(st_)[0]
                                     # url_video_mp4 = 'https://cdn.workgreat14.live//mp43/' + st.split('/')[-1]
-                                    url_video_mp4 = 'https://ccn.killcovid2021.com' + '//mp43/' + st.split('/')[-1]
+                                    url_video_mp4 = 'https://cdn.workgreat14.live' + '//mp43/' + st.split('/')[-1]
                                     print(url_video_mp4)
                                     if not os.path.exists(path_mp4):
                                         tq = tqdm(total=1)
@@ -572,7 +574,7 @@ def get_jiajin(page_jiajin):
                         VID = re.compile('id=VID.*?>(\d+)<').findall(page_text_detail)[0]
                         if len(VID) == 0:
                             VID = re.compile('VID=(d+)').findall(page_text_detail)[0]
-                        # m3u8_url = 'https://ccn.killcovid2021.com//m3u8/{}/{}.m3u8'.format(VID, VID)
+                        # m3u8_url = 'https://cdn.workgreat14.live//m3u8/{}/{}.m3u8'.format(VID, VID)
                         m3u8_url =m3u8_qianzui+ '//m3u8/{}/{}.m3u8'.format(VID, VID)
                         print(m3u8_url)
                         m3u8 = get_m3u8(m3u8_url, acount=0)
@@ -636,7 +638,7 @@ def get_jiajin(page_jiajin):
                                     # print(st)
                                     st = re.compile("src=\'(.*)\' type").findall(st_)[0]
                                     # url_video_mp4 = 'https://cdn.workgreat14.live//mp43/' + st.split('/')[-1]
-                                    url_video_mp4 = 'https://ccn.killcovid2021.com' + '//mp43/' + st.split('/')[-1]
+                                    url_video_mp4 = 'https://cdn.workgreat14.live' + '//mp43/' + st.split('/')[-1]
 
                                     print(url_video_mp4)
                                     if not os.path.exists(path_mp4):
@@ -683,7 +685,7 @@ def get_jiajin(page_jiajin):
 
 if __name__ == '__main__':
     yuming = 'https://g1015.91p47.com'
-    m3u8_qianzui = 'https://cdn.workgreat14.live'
+    m3u8_qianzui = 'https://la.killcovid2021.com'
     ips = get_ips()
     # 加精页面获取，获取用户视频列表地址
 
@@ -705,11 +707,11 @@ if __name__ == '__main__':
             i = 10
 
     path_list = os.listdir(r'G:\ghs\91porn')
-    # get_user(1,3)
+    get_user(1,1)
     while True:
         list_all = []
         with ThreadPoolExecutor(10) as tp:
-            url_list = [i for i in list(range(1, 50))]
+            url_list = [i for i in list(range(1, 200))]
             for page_jiajin in url_list:
                 # a = random.choice(url_list)
                 tp.submit(get_jiajin, str(page_jiajin))

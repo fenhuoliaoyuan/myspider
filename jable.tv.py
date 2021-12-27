@@ -100,7 +100,7 @@ if __name__ == '__main__':
     # path_name = r'E:\番号\FSDSS-003 肩負著片商希望的FALENO專屬新人美乃雀AV出道.ts'
     path_and_m3u8_list = []
     while True:
-        path_name = r'G:\番号\\'+input('输入影片名(输入完成请直接按回车)：') + '.ts'
+        path_name = 'G:\\ghs\\番号\\'+input('输入影片名(输入完成请直接按回车)：') + '.ts'
         if path_name.split('\\')[-1].replace('.ts','') == '':
             break
         url_m3u8 = input("输入m3u8地址:")
@@ -157,7 +157,7 @@ if __name__ == '__main__':
                 os.remove(j)
             print('ts删除完成')
         # fanhao_zhangma("E:\番号")
-    fanhao_zhangma(r"G:\番号")
+    fanhao_zhangma("G:\\ghs\\番号")
     end_time = int(time.time())
     time_all = end_time - start_time
     print('执行时间为：' + str(time_all) + 's')

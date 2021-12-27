@@ -105,7 +105,7 @@ def get_page_text(url, acount):
         if page_text.status_code != 200:
             raise ValueError
     except:
-        ips.remove(proxies)
+        # ips.remove(proxies)
         # config.conn_1.srem('ip_proxies', proxies['http'])
         # print('redis删除无用IP成功-{}'.format(proxies['http']))
         # print('删除连接超时Ip---{}-get_page_text'.format(proxies))

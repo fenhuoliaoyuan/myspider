@@ -30,6 +30,15 @@ def get_cryptor(url_m3u8):
             # print(url_key)
         elif 'ts' in line:
             ts_list.append(url_qianzui + line)
+        elif '.ttf' in line:
+            ts_list.append(url_qianzui + line)
+        elif '.jpg' in line:
+            ts_list.append(url_qianzui+line)
+        elif 'dan' in line:
+            ts_list.append(url_qianzui+line)
+        elif 'obj' in line:
+            ts_list.append(url_qianzui+line)
+
     if len(url_key) == 0:
         return ts_list
     else:
@@ -39,7 +48,7 @@ def get_cryptor(url_m3u8):
 
 
 def download_1(ts_url):
-    name_ts = ts_url.split('/')[-1]
+    name_ts = ts_url.split('/')[-1].replace('.ttf','.ts').replace('.jpg','.ts').replace('.ts','') + '.ts'
     if not os.path.exists(pathTsRoot+'\\' + name_ts):
         ts = get_ts(ts_url, acount=0)
         if ts is not None:
@@ -59,7 +68,7 @@ def download_1(ts_url):
         tq.update(1)
 
 def download_2(ts_url):
-    name_ts = ts_url.split('/')[-1]
+    name_ts = ts_url.split('/')[-1].replace('.ttf','.ts').replace('.jpg','.ts').replace('.ts','') + '.ts'
     if not os.path.exists(pathTsRoot+'\\' + name_ts):
         ts = get_ts(ts_url, acount=0)
         if ts is not None:
@@ -67,7 +76,7 @@ def download_2(ts_url):
             # name_ts = name_ts.split('.')[0]
             # ts_open = cryptor.decrypt(ts)
             # dict_ts[name_ts]= ts_open
-            with open(pathTsRoot+'\\' + name_ts, 'wb') as wt:
+            with open(pathTsRoot+'\\'+ name_ts, 'wb') as wt:
                 wt.write(ts)
                 # print(name_ts)
                 tq.update(1)
@@ -104,56 +113,53 @@ def get_page_text_m3u8(url, acount):
 
 if __name__ == '__main__':
     import time
-    pathTsRoot = 'C:\\ts\\madou_club_ts存放区'
-    path_root = 'D:\\hhh\\pornhub\\hongkongdoll'
-    url_list = []
+
     start_time = int(time.time())
+    yuMing = 'https://xsela.xyz'
+    pathTsRoot = 'C:\\ts\\xsela_xyz'
+    path_root = 'G:\\ghs\\三级'
     # path_name = r'E:\番号\FSDSS-003 肩負著片商希望的FALENO專屬新人美乃雀AV出道.ts'
-    for page in range(1,3):
-        url_search = 'https://madou.club/tag/%e8%8b%8f%e7%95%85'
-        # url_search = 'https://madou.club/category/%e7%88%b1%e8%b1%86#/page/'+'{}'.format(page)
+    for page in range(1,4):
+        url_search = 'https://xsela.xyz/search/videos/Alleys?page={}'.format(page)
         page_text_ = get_page_text(url_search,acount=0)
         if page_text_ is not None:
             page_text_ = page_text_.text
             tree = etree.HTML(page_text_)
-            article_list = tree.xpath('//article[@class="excerpt excerpt-c5"]')
+            article_list = tree.xpath('//div[@class="content-info"]')
             for row in article_list:
-                url = row.xpath('./a/@href')[0]
-                url=  'https://madou.club/hongkongdoll-%e7%9f%ad%e7%af%87%e9%9b%86-%e5%a4%8f%e6%97%a5%e5%9b%9e%e5%bf%86-part2.html'
-                # url = 'https://madou.club/tm0086-%e8%80%81%e5%85%ac%e5%81%b7%e7%aa%a5%e6%88%91%e4%b8%8e%e5%81%a5%e8%ba%ab%e6%95%99%e7%bb%83%e7%9a%84%e5%81%b7%e6%83%85%e8%ae%ad%e7%bb%83.html'
-                title = row.xpath('./h2/a/text()')[0]
-                # title = 'TM0086-老公偷窥我与健身教练的偷情训练'
-                title = 'hongkongdoll 短篇集「夏日回忆 贰」'
-
+                url = yuMing+row.xpath('./a/@href')[0]
+                title = row.xpath('./a/span/text()')[0]
+                title = '新金瓶梅 (1996)第一集'
                 if not os.path.exists(path_root):
                     os.mkdir(path_root)
                 path_name = path_root+'\\'+ title.replace('!','').replace('/','_').replace('?','').replace('.','').replace(':','') +'.ts'
                 if not os.path.exists(path_name) and not os.path.exists(path_name.replace('.ts','.mp4')):
                     list_ts_file = ''
                     print(title+'开始下载')
-                    yuMing = 'https://dash.madou.club'
                     # url = 'https://madou.club/mmz038-%e7%88%b1%e4%b8%8a%e9%99%aa%e7%8e%a9%e5%b0%8f%e5%a7%90%e5%a7%90-%e9%9a%be%e4%bb%a5%e5%8e%8b%e6%8a%91%e7%9a%84%e6%80%a7%e6%ac%b2%e6%82%b8%e5%8a%a8.html'
                     page_text = get_page_text(url=url,acount=0)
                     if page_text is not None:
                         page_text = page_text.text
-                        m3u8_src = yuMing + re.compile(yuMing+'(.*?) ').findall(page_text)[0]
-                        page_text_0 = get_page_text(m3u8_src,acount=0)
-                        if page_text_0 is not None:
-                            page_text_0 = page_text_0.text
-                            token = re.compile('var token = \"(.*?)\";').findall(page_text_0)[0]
-                            m3u8_ = re.compile('var m3u8 = \'(.*?)\';').findall(page_text_0)[0]
-                            url_m3u8 = yuMing + m3u8_ + '?' + 'token={}'.format(token)
+                        iframe_url = yuMing + re.compile('src=\"(/importer/video_player\.php.*?)\"').findall(page_text)[0]
+                        page_text_iframe = get_page_text(iframe_url,acount=0)
+                        if page_text_iframe is not None:
+                            page_text_iframe = page_text_iframe.text
+                        # token = re.compile('var token = \"(.*?)\";').findall(page_text)[0]
+                            url_m3u8= re.compile('https?.*?.m3u8').findall(page_text_iframe)[-1]
+                            url_m3u8 = 'https://v5.szjal.cn/20210517/C51poyvm/index.m3u8'
+                            # url_m3u8 = yuMing + m3u8_ + '?' + 'token={}'.format(token)
                             print(url_m3u8)
-                    # url_m3u8 = 'https://dash.madou.club/videos/61ad9038ac9edb19a57a752a/index.m3u8?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJ2aWV3IiwiaWF0IjoxNjM5MjczMTg2LCJleHAiOjE2MzkyNzMyODZ9.P0kmIlG6Fqkb782huuXNF0T1SnbqRaQ3r1BYFbA3r4c'
-                    # 'https://2xingav.com/video/m3u8/20a770ddca8b5b14dc545e5a2277feb9dddb720a.m3u8?video_server=lacdn'
-                    # 'https://c.s1c.xyz/videos/20a770ddca8b5b14dc545e5a2277feb9dddb720a/p00015.ts'
-                    # url_qianzui = '/'.join(url_m3u8.split('/')[:-1]) + '/'
+                            # url_m3u8 = 'https://dash.madou.club/videos/61ad9038ac9edb19a57a752a/index.m3u8?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJ2aWV3IiwiaWF0IjoxNjM5MjczMTg2LCJleHAiOjE2MzkyNzMyODZ9.P0kmIlG6Fqkb782huuXNF0T1SnbqRaQ3r1BYFbA3r4c'
+                            # 'https://2xingav.com/video/m3u8/20a770ddca8b5b14dc545e5a2277feb9dddb720a.m3u8?video_server=lacdn'
+                            # 'https://c.s1c.xyz/videos/20a770ddca8b5b14dc545e5a2277feb9dddb720a/p00015.ts'
+                            # url_qianzui = '/'.join(url_m3u8.split('/')[:-1]) + '/'
                             url_qianzui = ''
                             tuple_test = get_cryptor(url_m3u8)
                             if len(list(tuple_test)) == 2:
                                 cryptor, ts_list = tuple_test
                                 # tq = tqdm(total=len(ts_list))
-                                ts_list = [yuMing +'/'.join(m3u8_.split('/')[:-1])+'/'+ i.split('/')[-1] for i in ts_list]
+                                # ts_list = ['/'.join(url_m3u8.split('/')[:-1]) + '/' + i for i in
+                                #            ts_list]
                                 tq = tqdm(total=len(ts_list))
                                 while len(list_ts_file) < len(ts_list):
                                     with ThreadPoolExecutor(10) as tp:
@@ -163,8 +169,9 @@ if __name__ == '__main__':
                                 tq.close()
                                 print('ts下载完成')
                             else:
-                                ts_list = tuple_test[0]
-                                ts_list = [yuMing +'/'.join(m3u8_.split('/')[:-1])+'/'+ i.split('/')[-1] for i in ts_list]
+                                ts_list = tuple_test
+                                # ts_list = ['/'.join(url_m3u8.split('/')[:-1]).replace('i.baobuzz.com','dweb.link') + '/' + i.split('/')[-1] for i in
+                                #            ts_list]
                                 tq = tqdm(total=len(ts_list))
                                 while len(list_ts_file) < len(ts_list):
                                     with ThreadPoolExecutor(10) as tp:
@@ -180,7 +187,7 @@ if __name__ == '__main__':
                             #         print(i+'写入成功')
                             # list_ts_file = os.listdir('./测试')
                             with open(path_name, 'ab') as ab:
-                                for i in [j.split('/')[-1] for j in ts_list]:
+                                for i in [j.split('/')[-1].replace('.ttf','.ts').replace('.jpg','.ts').replace('.ts','') + '.ts' for j in ts_list]:
                                     with open(pathTsRoot+'\\' + i, 'rb') as rb:
                                         ab.write(rb.read())
                                 print(path_name + '合并完成')
@@ -188,13 +195,11 @@ if __name__ == '__main__':
                                 # print(j)
                                 os.remove(j)
                             print('ts删除完成')
-                            fanhao_zhangma(path_root)
+
                             end_time = int(time.time())
                             time_all = end_time - start_time
                             print('执行时间为：' + str(time_all) + 's')
-                            # from smtplib邮件通知 import my_send_email
-                            # my_send_email("标题：91porn用户视频更新",
-                            #               "<h1>更新视频：<br>{}".join(path_name.split('\\')[-1].replace(".ts",'')),
-                            #               "2319423737@qq.com",
-                            #               "2319423737@qq.com", )
-                            # print('更新完成,邮件发送完成，等待八个小时继续更新...')
+    fanhao_zhangma(path_root)
+    end_time = int(time.time())
+    time_all = end_time - start_time
+    print('执行时间为：' + str(time_all) + 's')
