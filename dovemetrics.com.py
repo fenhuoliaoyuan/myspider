@@ -1,3 +1,5 @@
+import re
+
 import requests
 
 headers = {
@@ -29,6 +31,25 @@ headers = {
     'x-user-locale': 'zh-cn'
 }
 url = 'https://airtable.com/v0.3/application/apppcI0nClUwo3GCb/read?stringifiedObjectParams=%7B%22includeDataForTableIds%22%3A%5B%22tblEfJE917y1Dhf51%22%5D%2C%22includeDataForViewIds%22%3Anull%2C%22shouldIncludeSchemaChecksum%22%3Atrue%2C%22mayOnlyIncludeRowAndCellDataForIncludedViews%22%3Atrue%7D&requestId=req58hOqBcOcKErou&accessPolicy=%7B%22allowedActions%22%3A%5B%7B%22modelClassName%22%3A%22application%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb%22%2C%22action%22%3A%22read%22%7D%2C%7B%22modelClassName%22%3A%22application%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb%22%2C%22action%22%3A%22readForDetailView%22%7D%2C%7B%22modelClassName%22%3A%22table%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb+*%22%2C%22action%22%3A%22read%22%7D%2C%7B%22modelClassName%22%3A%22table%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb+*%22%2C%22action%22%3A%22readData%22%7D%2C%7B%22modelClassName%22%3A%22table%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb+*%22%2C%22action%22%3A%22readDataForRowCards%22%7D%2C%7B%22modelClassName%22%3A%22view%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb+*%22%2C%22action%22%3A%22readRowOrder%22%7D%2C%7B%22modelClassName%22%3A%22view%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb+*%22%2C%22action%22%3A%22readData%22%7D%2C%7B%22modelClassName%22%3A%22view%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb+*%22%2C%22action%22%3A%22getMetadataForPrinting%22%7D%2C%7B%22modelClassName%22%3A%22row%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb+*%22%2C%22action%22%3A%22readDataForDetailView%22%7D%2C%7B%22modelClassName%22%3A%22row%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb+*%22%2C%22action%22%3A%22createBoxDocumentSession%22%7D%2C%7B%22modelClassName%22%3A%22row%22%2C%22modelIdSelector%22%3A%22apppcI0nClUwo3GCb+*%22%2C%22action%22%3A%22createDocumentPreviewSession%22%7D%5D%2C%22shareId%22%3A%22shrP7uEmnxbv7dUEV%22%2C%22applicationId%22%3A%22apppcI0nClUwo3GCb%22%2C%22sessionId%22%3A%22sesJTPlKseR3RLvGj%22%2C%22generationNumber%22%3A0%2C%22signature%22%3A%22b9221d3cdbcf703dbfa84051b2c1ed01bf478427975f220faf9860589eb9b29e%22%7D'
-res = requests.get(url=url, headers=headers)
-pageText = res.text
-print()
+res = requests.get(url=url, headers=headers).json()
+choices_TICCKER = res['data']['tableSchemas'][4]['columns'][2]['typeOptions']['choices']#'data.tableSchemas[4].columns[2].typeOptions.choices'
+choices_LOCATION = res['data']['tableSchemas'][4]['columns'][10]['typeOptions']['choices']#‘data.tableSchemas[4].columns[10].typeOptions.choices
+rows = res['data']['tableDatas'][0]['rows']
+# print()
+for row in rows:
+    COMPANY = row['cellValuesByColumnId']['fldYopilw6pRY334s']
+    # TICKER = choices[row['cellValuesByColumnId']['fldK0vbIANJe4oZgL']]['name']
+    TICKER = choices_TICCKER[row['cellValuesByColumnId']['fldK0vbIANJe4oZgL']]['name']
+    LOCATION = choices_LOCATION[row['cellValuesByColumnId']['fldcS8EC1HmIuKx7k']]['name']
+    YEAR_FOUNDED = row['cellValuesByColumnId']['fldYaVxLsnQ8BsaR2']
+    FOUNDER = row['cellValuesByColumnId']['fldbGZmPcgWw1UomW']['valuesByForeignRowId']['recNniOlJpoflM0L4']
+    if FOUNDER is list and len(FOUNDER)>1:
+        FOUNDER = ','.join(FOUNDER)
+    WEBSITE = row['cellValuesByColumnId']['fldiL1KEOZO4MHcvW']['valuesByForeignRowId']['recNniOlJpoflM0L4']
+    if WEBSITE is list and len(WEBSITE)>1:
+        WEBSITE = ','.join(WEBSITE)
+    TWITTER = row['cellValuesByColumnId']['fldfxvX3xyd1uBTM4']
+    pass
+    print()
+# pageText = res.text
+# title = re.compile("").findall(pageText)
