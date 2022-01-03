@@ -92,7 +92,7 @@ class TwitterVideoDownload(object):
                     print(videoTitle + '下载完成')
 
 
-def mian():
+def main():
     url_list = []
     while True:
         url = input('输入接口地址（搜索UserMedia）：')
@@ -122,4 +122,4 @@ def mian():
 
 
 if __name__ == '__main__':
-    mian()
+    main()
