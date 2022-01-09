@@ -115,7 +115,7 @@ user_agent_list = [
     "Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.11 (KHTML, like Gecko) Ubuntu/11.10 Chromium/17.0.963.65 Chrome/17.0.963.65 Safari/535.11",
     "Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.65 Safari/535.11",
 ]
-PATH_DIR = 'G:\\ghs\\twitter\\抖音风'
+PATH_DIR = 'G:\\ghs\\twitter\\HMV_MMD Clips'
 HEADERS = {
     'accept-language': 'zh-CN,zh;q=0.9,ja;q=0.8',
     'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',

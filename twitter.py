@@ -135,12 +135,10 @@ class TwitterMediaDownload(object):
         headers = {
             'user-agent': random.choice(user_agent_list)
         }
-        if 'videoTitle' in data.keys():
+        if 'videoUrl' in data.keys():
             videoTitle = data['videoTitle']
             videoUrl = data['videoUrl']
-            path_mp4 = PATH_DIR + '\\' + 'Videos' + '\\' + + videoTitle.replace(':', '_').replace('/', '_').replace('!',
-                                                                                                                    '_').replace(
-                '?', '|', '_').replace('*', '_') + '.mp4'
+            path_mp4 = PATH_DIR + '\\' + 'Videos' + '\\' + videoTitle.replace(':', '_').replace('/', '_').replace('!','_').replace('?','_').replace( '|', '_').replace('*', '_') + '.mp4'
             if not os.path.exists(path_mp4):
                 mp4Bytes = requests.get(url=videoUrl, headers=headers)
                 if mp4Bytes.status_code == 200:
