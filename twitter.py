@@ -92,21 +92,34 @@ class TwitterMediaDownload(object):
                     try:
                         photoTitle_ = legacy['full_text']
                         photoTitle = photoTitle_.split('https')[0].replace('\n', '')
-                        print(photoTitle)
                         if len(photoTitle) < 1:
                             photoTitle = photoTitle_.split('/')[-1].replace('\n', '')
+                        print(photoTitle)
                     except:
                         photoTitle = None
                     try:
-                        photoUrl = legacy['entities']['media'][0]['media_url_https']
+                        photoUrls = legacy['entities']['media']
+                        # photoUrl = legacy['entities']['media'][0]['media_url_https']
                     except:
-                        photoUrl = None
-                    if len(photoTitle) > 0 and len(photoUrl) > 0:
-                        data = {
-                            'photoTitle': photoTitle,
-                            'photoUrl': photoUrl
-                        }
-                        cls.data_list.append(data)
+                        photoUrls = None
+                    if len(photoTitle) > 0 and len(photoUrls) > 0:
+                        if len(photoUrls) > 1:
+                            for i in photoUrls:
+                                photoUrl = i['media_url_https']
+                                photoTitle = photoTitle + ' ' + photoUrl.split('/')[-1].replace('.jpg', '')
+                                data = {
+                                    'photoTitle': photoTitle,
+                                    'photoUrl': photoUrl
+                                }
+                                cls.data_list.append(data)
+                                photoTitle = photoTitle.replace(' ' + photoUrl.split('/')[-1].replace('.jpg', ''), '')
+                        else:
+                            photoUrl = photoUrls[0]['media_url_https']
+                            data = {
+                                'photoTitle': photoTitle,
+                                'photoUrl': photoUrl
+                            }
+                            cls.data_list.append(data)
 
                 except:
                     pass
