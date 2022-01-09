@@ -94,6 +94,7 @@ class RiSite(object):
 
 
 def main():
+    # 'https://ri1.site/category/%e7%90%b3%e7%90%b3-jamiebabe/'
     url = input('输入链接地址：')
     pages = input('输入下载的页数：')
     detaiLUrlList = RiSite.getDetailUrl(url=url,pages=pages)
@@ -114,7 +115,7 @@ def main():
                 datasList = [dict(t) for t in set([tuple(d.items()) for d in datasList])]
                 print("抓取的视频列表长度：" + str(len(datasList)))
                 print('开始下载视频>>>')
-                with ThreadPoolExecutor(10) as tp:
+                with ThreadPoolExecutor(6) as tp:
                     for data in datasList:
                         tp.submit(RiSite.saveToFile, data)
 
