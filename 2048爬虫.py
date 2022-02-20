@@ -2,8 +2,8 @@ import requests
 import re
 from lxml import etree
 import os
-from fontTools.ttLib import TTFont
-from 爬虫小项目 import config
+# from fontTools.ttLib import TTFont
+import config
 import random
 import io
 
@@ -64,7 +64,7 @@ def get_img(url_img,acount):
     else:
         return img
 def main(page):
-    url = 'https://bbs6.unr1.xyz/2048/thread.php?fid-29-page-{}.html'.format(page)
+    url = 'https://bbs6.u79m.xyz/2048/thread.php?fid-29-type-9-page-{}.html'.format(page)
     # page_text = requests.get(url=url,headers=headers)
     page_text = get_page_text(url=url,acount=0)
     page_text.encoding = page_text.apparent_encoding
@@ -96,11 +96,11 @@ def main(page):
     print('\033[1;33;40m第{}页下载完成'.format(page))
 if __name__ == '__main__':
     ips = config.ips
-    path_root = r'C:\动图'
+    path_root = r'G:\ghs\动图'
     if not os.path.exists(path_root):
         os.mkdir(path_root)
     from concurrent.futures import ThreadPoolExecutor
-    with ThreadPoolExecutor(50) as tp:
-        for page in range(1, 200):
+    with ThreadPoolExecutor(5) as tp:
+        for page in range(11, 20):
             tp.submit(main, page)
     # main(2)

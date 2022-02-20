@@ -12,7 +12,7 @@ def my_send_email(title, content_html, from_email, to_email):
 
     # 使用qq邮箱服务，发送邮件
     smtpObj = smtplib.SMTP_SSL('smtp.qq.com', 465)
-    smtpObj.login(from_email, 'rphjlvwqonblecej')  # 密钥pop03的是[wxoxhqqoptmydida]
+    smtpObj.login(from_email, 'urxraodnpjntdhjg')  # 授权码
     smtpObj.sendmail(from_email, [to_email], message.as_string())
     smtpObj.quit()
 

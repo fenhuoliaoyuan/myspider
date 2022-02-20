@@ -78,78 +78,35 @@ for page in range(2):
                 # url_VideoHLS_m3u8 = re.findall(ex,line,re.S)[0]
                 if re.findall(ex,line,re.S) ==[]:
                     url_VideoHLS_m3u8 = re.findall(ex_00,line,re.S)[0]#获得m3u8地址
-                    # print(url_VideoHLS_m3u8)
-                    # print('1')
                 else:
                     url_VideoHLS_m3u8 = re.findall(ex,line,re.S)[0]
-                    # print(url_VideoHLS_m3u8)
-                    # print(2)
-                # if url_VideoHLS_m3u8 == '':
-                #     raise IndexError
-                # print(url_VideoHLS_m3u8)
             text_m3u8_geshi = session.get(url_VideoHLS_m3u8,headers=random.choice(headers_list)).text.split('\n')#发现是一个真正视频m3u8的text
-            # print(text_m3u8_geshi)
-            # text_m3u8_geshi_open = open(text_m3u8_geshi,'r')
-            # while True:
-            #     geshi = input('请输入你要下载的格式（输入1080，720，480）:')
-            #     for line_0 in text_m3u8_geshi:
-            #         # print(line_0)
-            #         if 'hls-{}'.format(geshi) in line_0:
-            #             url_m3u8 =
-            #             break
-            #         # elif 'hls-480' in line_0:
-            #         #     print(line_0)
-            #         #     continue
-            #         else:
-            #             break
-            #     # print('没有{}格式，请重新输入低一级格式：'.format(geshi))
             ex_0 = '(http.*/)hls'
             m3u8_qianzui = re.findall(ex_0,url_VideoHLS_m3u8,re.S)[0]#真实m3u8的前缀
-            # for line_0 in text_m3u8_geshi:
-            #         # print(line_0)
-            #         if 'hls-720' in line_0:
-            #             # print(line_0)
-            #             url_m3u8 = m3u8_qianzui + line_0
-            #             # print(re.findall(ex_0,url_VideoHLS_m3u8,re.S))
-            #             # print(url_m3u8)
-            #             continue
-            # #         # elif 'hls-480' in line_0:
-            # #         #     print(line_0)
-            # #         #     continue
-            #         else:
-            #             continue
-            # 将挑选得到的真实m3u8地址放入字典
+
             url_m3u8_list = {}
             for line_1 in text_m3u8_geshi:#遍历文本挑选格式
                 if 'hls-1080' in line_1:
                     url_ts = m3u8_qianzui + line_1
-                    # url_ts_list.append(url_ts)
                     url_m3u8_list['1080'] = url_ts
                     continue
                 elif 'hls-720' in line_1:
                     url_ts = m3u8_qianzui + line_1
-                    # url_ts_list.append(url_ts)
                     url_m3u8_list['720'] = url_ts
                     continue
                 elif 'hls-480' in line_1:
                     url_ts = m3u8_qianzui + line_1
-                    # url_ts_list.append(url_ts)
                     url_m3u8_list['480'] = url_ts
                     continue
             acounts_0 = 0
-            # url_ts_list = []
-            #
             if '1080' in url_m3u8_list.keys():
-                # print(url_ts)
                 text_m3u8_list = session.get(url=url_m3u8_list['1080'], headers=random.choice(headers_list)).text.split('\n')
-                # print(text_m3u8_list)
                 ts_list = []#用来装ts的列表
                 for line_2 in text_m3u8_list:
                     if 'ts' in line_2:
                         ts_list.append(line_2)
                 print('========第{}个视频{}.mp4（1080p）下载开始========'.format(acounts + 1, title_video))
                 for ts in ts_list:
-               # print(text_m3u8_list)
                     ts_finally = m3u8_qianzui + ts
                     ts = session.get(ts_finally, headers=random.choice(headers_list)).content
                     with open(path_video, 'ab') as fp:
@@ -162,14 +119,12 @@ for page in range(2):
             elif '720' in url_m3u8_list.keys():
                 text_m3u8_list = session.get(url=url_m3u8_list['720'], headers=random.choice(headers_list)).text.split(
                     '\n')
-                # print(text_m3u8_list)
                 ts_list = []  # 用来装ts的列表
                 for line_2 in text_m3u8_list:
                     if 'ts' in line_2:
                         ts_list.append(line_2)
                 print('========第{}个视频{}.mp4（720p）下载开始========'.format(acounts + 1, title_video))
                 for ts in ts_list:
-                    # print(text_m3u8_list)
                     ts_finally = m3u8_qianzui + ts
                     ts = session.get(ts_finally, headers=random.choice(headers_list)).content
                     with open(path_video, 'ab') as fp:
@@ -182,14 +137,12 @@ for page in range(2):
             elif '480' in url_m3u8_list.keys():
                 text_m3u8_list = session.get(url=url_m3u8_list['480'], headers=random.choice(headers_list)).text.split(
                     '\n')
-                # print(text_m3u8_list)
                 ts_list = []  # 用来装ts的列表
                 for line_2 in text_m3u8_list:
                     if 'ts' in line_2:
                         ts_list.append(line_2)
                 print('========第{}个视频{}.mp4下载开始（480p）========'.format(acounts + 1, title_video))
                 for ts in ts_list:
-                    # print(text_m3u8_list)
                     ts_finally = m3u8_qianzui + ts
                     ts = session.get(ts_finally, headers=random.choice(headers_list)).content
                     with open(path_video, 'ab') as fp:

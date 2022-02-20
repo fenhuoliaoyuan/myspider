@@ -1,12 +1,7 @@
 import requests
-import os
-import re
 from lxml import etree
-from tqdm import tqdm
 import config
 import random
-from config import user_agent_list
-from time import sleep
 
 
 

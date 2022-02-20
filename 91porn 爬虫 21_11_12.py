@@ -240,6 +240,9 @@ def get_ips():
     return ips__
 
 
+path_list = os.listdir(r'G:\ghs\91porn')
+
+
 def get_user(a, b):
     # n = 0
     m = 0
@@ -256,36 +259,36 @@ def get_user(a, b):
             for div in div_list:
                 url_jiajin_detail = div.xpath('./a/@href')[0]
                 user = div.xpath('./text()')[5]
-                user = user.strip()
-                path_ = r'G:\ghs\91porn' + '\\' + user.replace('*',"_")
+                user = user.replace('.', '').strip().replace(':', '').replace('!', '').replace('|', '').replace('*', '').replace('/', '').replace('?', '')
+                path_ = r'G:\ghs\91porn' + '\\' + user.replace('*', "_")
                 if not os.path.exists(path_):
                     os.mkdir(path_)
                     print(user)
-                # page_text_jiajin_ = requests.get(url=url_jiajin_detail,headers=headers).text
-                page_text_jiajin_ = get_page_text_jiajin_(url_jiajin_detail, acount=0)
-                if page_text_jiajin_ is not None:
-                    tree__ = etree.HTML(page_text_jiajin_)
-                    try:
-                        title = tree__.xpath('//*[@id="videodetails-content"]/div[2]/span[2]/a[1]/span/text()')[0]
-                        if title != 'guolifeng_513':
-                            # // *[ @ id = "wrapper"] / div[1] / div[3] / div / div / div[1] / div / text()[2]
-                            # user_name = conn.sadd('user_name',title)
-                            # user_name = conn.zadd('user_name_', title, n)
-                            user_name = conn.sadd('UN', title)
-                            # n += 1
-                            if user_name == 1:
-                                URL__ = 'https://0316.workarea2.live/' + \
-                                        tree__.xpath('//*[@id="videodetails-content"]/span[@class="title"]/a[1]/@href')[
-                                            0]
-                                # URL_list.append(URL__)
-                                print('第{}页用户视频列表获取成功----{}---更新用户{}'.format(page, URL__, title))
-                                # conn.zadd('91users_videos_list_url_guonei_', URL__, m)
-                                conn.sadd("91jingxuan", URL__)
-                                m += 1
-                        else:
-                            print(title)
-                    except:
-                        print('没拿到用户名')
+                # # page_text_jiajin_ = requests.get(url=url_jiajin_detail,headers=headers).text
+                # page_text_jiajin_ = get_page_text_jiajin_(url_jiajin_detail, acount=0)
+                # if page_text_jiajin_ is not None:
+                #     tree__ = etree.HTML(page_text_jiajin_)
+                #     try:
+                #         title = tree__.xpath('//*[@id="videodetails-content"]/div[2]/span[2]/a[1]/span/text()')[0]
+                #         if title != 'guolifeng_513' and title !='虹猫':
+                #             # # // *[ @ id = "wrapper"] / div[1] / div[3] / div / div / div[1] / div / text()[2]
+                #             # # user_name = conn.sadd('user_name',title)
+                #             # # user_name = conn.zadd('user_name_', title, n)
+                #             # user_name = conn.sadd('UN', title)
+                #             # # n += 1
+                #             # if user_name == 1:
+                #             #     URL__ = 'https://0316.workarea2.live/' + \
+                #             #             tree__.xpath('//*[@id="videodetails-content"]/span[@class="title"]/a[1]/@href')[
+                #             #                 0]
+                #             #     # URL_list.append(URL__)
+                #             #     print('第{}页用户视频列表获取成功----{}---更新用户{}'.format(page, URL__, title))
+                #             #     # conn.zadd('91users_videos_list_url_guonei_', URL__, m)
+                #             #     conn.sadd("91jingxuan", URL__)
+                #             #     m += 1
+                #         else:
+                #             print(title)
+                #     except:
+                #         print('没拿到用户名')
 
 
 def get_jiajin(page_jiajin):
@@ -311,12 +314,12 @@ def get_jiajin(page_jiajin):
             url_jiajin_detail = div.xpath('./a/@href')[0]
             viewkey = re.compile('viewkey=(.*?)&page').findall(url_jiajin_detail)[0]
             user_name_ = div.xpath('./text()')[5]
-            user_name_ = user_name_.strip().replace('.', '').replace('*','_')
+            user_name_ = user_name_.strip().replace('.', '').replace('*', '_')
             video_name_ = div.xpath('./a/span[@class="video-title title-truncate m-t-5"]/text()')[0].replace \
-                (':', '').replace('!', '').replace('|', '').replace('*', '').replace('?', '').replace('[原创]',
+                (':', '').replace('!', '').replace('|', '').replace('*', '').replace('/', '').replace('?', '').replace('[原创]',
                                                                                                       '').strip()
             user_name_ = user_name_.strip()
-            path_mp4 = r'G:\ghs\91porn' + '\\' + user_name_ + '\\' + user_name_ + video_name_ + '.mp4'
+            path_mp4 = r'G:\ghs\91porn' + '\\' + user_name_ + '\\' + user_name_ + ' ' + video_name_ + '.mp4'
             if user_name_ in path_list:
                 url_detail_test = conn.sadd('url_video', viewkey)
 
@@ -333,8 +336,8 @@ def get_jiajin(page_jiajin):
                         video_name = video_name.replace('?', '').replace('Chinese homemade video', '').strip().replace \
                             (':', '').replace('!', '').replace('|', '').replace('*', '').replace('[原创]', '')
                         user_name = tree_.xpath('//*[@id="videodetails-content"]/div[2]/span[2]/a[1]/span/text()')[
-                            0].replace('.', '')
-                        path_mp4 = r'G:\ghs\91porn' + '\\' + user_name + '\\' + user_name + video_name + '.ts'
+                            0].replace('.', '').replace(':', '').replace('!', '').replace('|', '').replace('*', '').replace('/', '').replace('?', '')
+                        path_mp4 = r'G:\ghs\91porn' + '\\' + user_name + '\\' + user_name +' '+ video_name + '.ts'
                         # UID = tree_.xpath('//div[@id=VID]/text()')[0]t
                         VID = re.compile('id=VID.*?>(\d+)<').findall(page_text_detail)[0]
                         if len(VID) == 0:
@@ -441,14 +444,14 @@ def get_jiajin(page_jiajin):
                                                                                       '').strip().replace \
                             (':', '').replace('!', '').replace('|', '').replace('*', '').replace('[原创]', '')
                         user_name = tree_.xpath('//*[@id="videodetails-content"]/div[2]/span[2]/a[1]/span/text()')[
-                            0].replace('.', '')
-                        path_mp4 = r'G:\ghs\91porn' + '\\' + user_name + '\\' + user_name + video_name + '.ts'
+                            0].replace('.', '').replace(':', '').replace('!', '').replace('|', '').replace('*', '').replace('/', '').replace('?', '')
+                        path_mp4 = r'G:\ghs\91porn' + '\\' + user_name + '\\' + user_name + ' ' +video_name + '.ts'
                         # UID = tree_.xpath('//div[@id=VID]/text()')[0]t
                         VID = re.compile('id=VID.*?>(\d+)<').findall(page_text_detail)[0]
                         if len(VID) == 0:
                             VID = re.compile('VID=(d+)').findall(page_text_detail)[0]
                         # m3u8_url = 'https://cdn.workgreat14.live//m3u8/{}/{}.m3u8'.format(VID, VID)
-                        m3u8_url =m3u8_qianzui+ '//m3u8/{}/{}.m3u8'.format(VID, VID)
+                        m3u8_url = m3u8_qianzui + '//m3u8/{}/{}.m3u8'.format(VID, VID)
                         print(m3u8_url)
                         m3u8 = get_m3u8(m3u8_url, acount=0)
                         # m3u8 = requests.get(url=m3u8_url, headers=headers).text
@@ -459,7 +462,7 @@ def get_jiajin(page_jiajin):
                                 ts_list = []
                                 for ts_ in m3u8.split('\n'):
                                     if 'ts' in ts_:
-                                        url_ts =m3u8_qianzui+ '//m3u8/{}/'.format(VID) + ts_
+                                        url_ts = m3u8_qianzui + '//m3u8/{}/'.format(VID) + ts_
                                         ts_list.append(url_ts)
                                 # print('ts数量为{}'.format(len(ts_list)))
                                 pbar = tqdm(total=len(ts_list))
@@ -568,14 +571,14 @@ def get_jiajin(page_jiajin):
                                                                                       '').strip().replace \
                             (':', '').replace('!', '').replace('|', '').replace('*', '').replace('[原创]', '')
                         user_name = tree_.xpath('//*[@id="videodetails-content"]/div[2]/span[2]/a[1]/span/text()')[
-                            0].replace('.', '')
+                            0].replace('.', '').replace(':', '').replace('!', '').replace('|', '').replace('*', '').replace('/', '').replace('?', '')
                         path_mp4 = r'G:\ghs\91porn' + '\\' + user_name + '\\' + user_name + video_name + '.mp4'
                         # UID = tree_.xpath('//div[@id=VID]/text()')[0]t
                         VID = re.compile('id=VID.*?>(\d+)<').findall(page_text_detail)[0]
                         if len(VID) == 0:
                             VID = re.compile('VID=(d+)').findall(page_text_detail)[0]
                         # m3u8_url = 'https://cdn.workgreat14.live//m3u8/{}/{}.m3u8'.format(VID, VID)
-                        m3u8_url =m3u8_qianzui+ '//m3u8/{}/{}.m3u8'.format(VID, VID)
+                        m3u8_url = m3u8_qianzui + '//m3u8/{}/{}.m3u8'.format(VID, VID)
                         print(m3u8_url)
                         m3u8 = get_m3u8(m3u8_url, acount=0)
                         # m3u8 = requests.get(url=m3u8_url, headers=headers).text
@@ -586,7 +589,7 @@ def get_jiajin(page_jiajin):
                                 ts_list = []
                                 for ts_ in m3u8.split('\n'):
                                     if 'ts' in ts_:
-                                        url_ts = m3u8_qianzui+'//m3u8/{}/'.format(VID) + ts_
+                                        url_ts = m3u8_qianzui + '//m3u8/{}/'.format(VID) + ts_
                                         ts_list.append(url_ts)
                                 # print('ts数量为{}'.format(len(ts_list)))
                                 pbar = tqdm(total=len(ts_list))
@@ -706,8 +709,8 @@ if __name__ == '__main__':
         else:
             i = 10
 
+    get_user(1, 1)
     path_list = os.listdir(r'G:\ghs\91porn')
-    get_user(1,1)
     while True:
         list_all = []
         with ThreadPoolExecutor(10) as tp:

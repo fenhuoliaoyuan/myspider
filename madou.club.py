@@ -105,13 +105,13 @@ def get_page_text_m3u8(url, acount):
 if __name__ == '__main__':
     import time
     pathTsRoot = 'C:\\ts\\madou_club_ts存放区'
-    path_root = 'D:\\hhh\\pornhub\\hongkongdoll'
+    path_root = r'D:\hhh\国产\夏晴子'
     url_list = []
     start_time = int(time.time())
     # path_name = r'E:\番号\FSDSS-003 肩負著片商希望的FALENO專屬新人美乃雀AV出道.ts'
     for page in range(1,3):
-        url_search = 'https://madou.club/tag/%e8%8b%8f%e7%95%85'
-        # url_search = 'https://madou.club/category/%e7%88%b1%e8%b1%86#/page/'+'{}'.format(page)
+        # url_search = 'https://madou.club/tag/%e6%9e%97%e6%99%93%e9%9b%aa'
+        url_search = 'https://madou.club/tag/%e5%a4%8f%e6%99%b4%e5%ad%90#/page/'+'{}'.format(page)
         page_text_ = get_page_text(url_search,acount=0)
         if page_text_ is not None:
             page_text_ = page_text_.text
@@ -119,11 +119,11 @@ if __name__ == '__main__':
             article_list = tree.xpath('//article[@class="excerpt excerpt-c5"]')
             for row in article_list:
                 url = row.xpath('./a/@href')[0]
-                url=  'https://madou.club/hongkongdoll-%e7%9f%ad%e7%af%87%e9%9b%86-%e5%a4%8f%e6%97%a5%e5%9b%9e%e5%bf%86-part2.html'
+                # url=  'https://madou.club/hongkongdoll-%e7%9f%ad%e7%af%87%e9%9b%86-%e5%a4%8f%e6%97%a5%e5%9b%9e%e5%bf%86-part3.html'
                 # url = 'https://madou.club/tm0086-%e8%80%81%e5%85%ac%e5%81%b7%e7%aa%a5%e6%88%91%e4%b8%8e%e5%81%a5%e8%ba%ab%e6%95%99%e7%bb%83%e7%9a%84%e5%81%b7%e6%83%85%e8%ae%ad%e7%bb%83.html'
                 title = row.xpath('./h2/a/text()')[0]
                 # title = 'TM0086-老公偷窥我与健身教练的偷情训练'
-                title = 'hongkongdoll 短篇集「夏日回忆 贰」'
+                # title = 'hongkongdoll 短篇集「夏日回忆 叁'
 
                 if not os.path.exists(path_root):
                     os.mkdir(path_root)

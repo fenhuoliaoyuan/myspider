@@ -54,7 +54,7 @@ if __name__ == '__main__':
     start_time = int(time.time())
     path_and_m3u8_list = []
     while True:
-        path_name = r'G:\\ghs\\番号\\' + input('输入影片名(输入完成请直接按回车)：') + '.ts'
+        path_name = r'E:\番号' + input('输入影片名(输入完成请直接按回车)：') + '.ts'
         if path_name.split('\\')[-1].replace('.ts','') == '':
             break
         url_m3u8 = input("输入m3u8地址:")
@@ -62,7 +62,7 @@ if __name__ == '__main__':
             break
         path_and_m3u8_list.append(path_name + '##' + url_m3u8)
     for path_and_m3u8 in path_and_m3u8_list:
-        path_name = path_and_m3u8.split('##')[0]
+        path_name = path_and_m3u8.split('##')[0].replace('?','')
         print(path_name)
         url_m3u8 = path_and_m3u8.split('##')[1]
         print(url_m3u8)
@@ -93,7 +93,7 @@ if __name__ == '__main__':
             for j in ['C:\javamost_ts存放区\\' + i for i in list_ts_file]:
                 os.remove(j)
             print('ts删除完成')
+            fanhao_zhangma('E:\番号')
             end_time = int(time.time())
             time_all = end_time - start_time
             print('执行时间为：' + str(time_all) + 's')
-            fanhao_zhangma('G:\\ghs\\番号')

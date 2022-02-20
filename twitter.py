@@ -57,14 +57,14 @@ class TwitterMediaDownload(object):
         if response is not None:
             res = response.json()
             try:
-                entriesList = res['data']['user']['result']['timeline']['timeline']['instructions'][0]['entries']
+                entriesList = res['data']['user']['result']['timeline']['timeline']['instructions'][1]['entries']
                 for entrie in entriesList:
                     try:
                         legacy = entrie['content']['itemContent']['tweet_results']['result']['legacy']
                         try:
                             videoTitle = legacy['full_text']
                             videoTitle = videoTitle.split('https')[0].replace('\n', '')
-                            print(videoTitle)
+                            # print(videoTitle)
                         except:
                             videoTitle = None
                         try:
@@ -72,7 +72,7 @@ class TwitterMediaDownload(object):
                             videoUrls = legacy['extended_entities']['media'][0]['video_info']['variants']  # [1]['url']
                             videoUrls = [i for i in videoUrls if i['content_type'] == 'video/mp4']
                             videoUrl = videoUrls[0]['url']
-                            print(videoUrl)
+                            # print(videoUrl)
                             # for row i
                             # n videoUrls:
                             #     if row['content_type'] == 'video/mp4':
@@ -103,7 +103,7 @@ class TwitterMediaDownload(object):
         if response is not None:
             res = response.json()
             try:
-                entriesList = res['data']['user']['result']['timeline']['timeline']['instructions'][0]['entries']
+                entriesList = res['data']['user']['result']['timeline']['timeline']['instructions'][1]['entries']
                 for entrie in entriesList:
                     try:
                         legacy = entrie['content']['itemContent']['tweet_results']['result']['legacy']
@@ -112,7 +112,7 @@ class TwitterMediaDownload(object):
                             photoTitle = photoTitle_.split('https')[0].replace('\n', '')
                             if len(photoTitle) < 1:
                                 photoTitle = photoTitle_.split('/')[-1].replace('\n', '')
-                            print(photoTitle)
+                            # print(photoTitle)
                         except:
                             photoTitle = None
                         try:

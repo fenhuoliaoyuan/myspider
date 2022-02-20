@@ -38,9 +38,9 @@ if __name__ == '__main__':
     # URL  = input('例如https://cn.pornhub.com/model/hongkongdoll/videos\n输入你要下载的用户视频列表地址  ：')
     # URL = 'https://cn.pornhub.com/model/hongkongdoll/videos'
     # URL = 'https://cn.pornhub.com/model/3d-hentaigames/videos'
-    URL = 'https://cn.pornhub.com/model/rondoudoumedia/videos'
+    URL = 'https://cn.pornhub.com/model/uuuu_bijirichan/videos'
     # dir_name = input("输入你要存储视频的目录路径 ：")https://cn.pornhub.com/model/uuuujapan/videos
-    dir_name = r'G:\ghs\pornhub'
+    dir_name = r'D:\hhh\pornhub'
     # page_all = input("输入要下载的视频列表的总页数：")
     page_all = '1'
     if not os.path.exists(dir_name):
@@ -58,6 +58,6 @@ if __name__ == '__main__':
     # pool.map(os.system, url_list_cmd)
     from concurrent.futures import ThreadPoolExecutor
 
-    with ThreadPoolExecutor(5) as tp:
+    with ThreadPoolExecutor(10) as tp:
         for url in url_list_cmd:
             tp.submit(os.system, url)

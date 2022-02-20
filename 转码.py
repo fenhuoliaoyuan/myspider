@@ -24,7 +24,5 @@ def fanhao_zhangma(path_dir):
 if __name__ == '__main__':
     # fanhao_zhangma("E:\番号")
     # fanhao_zhangma(r'D:\hhh\\国产\\Miohot')
-    fanhao_zhangma(r'C:\\番号')
-    fanhao_zhangma(r'G:\\番号')
-    fanhao_zhangma(r'F:\\番号')
+    fanhao_zhangma('E:\番号')
     # fanhao_zhangma()
