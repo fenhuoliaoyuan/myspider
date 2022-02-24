@@ -110,11 +110,13 @@ def downloadKuaishou():
 
     def saveToFile(data):
         """mp4下载"""
-        proxies = random.choice(ips)
+        # proxies = random.choice(ips)
         url = data['photoUrl']
-        dst = path_dir + '\\' + data['caption'] + '.mp4'
+        dst = path_dir + '\\' + data['caption'].replace(':', ' ').replace('/', ' ').replace('!', ' ').replace('?',
+                                                                                                              ' ').replace(
+            '|', ' ').replace('*', ' ').replace('\n', '').replace('.', ' ') + '.mp4'
         # 设置stream=True参数读取大文件
-        response = requests.get(url, stream=True, proxies=proxies)
+        response = requests.get(url, stream=True)
         # 通过header的content-length属性可以获取文件的总容量
         file_size = int(response.headers['content-length'])
         if os.path.exists(dst):
@@ -142,7 +144,7 @@ def downloadKuaishou():
     print('用户名：' + KuaiShou.author)
     print("抓取的视频长度：" + str(len(KuaiShou.datas)))
     print('开始下载视频>>>')
-    with ThreadPoolExecutor(1) as tp:
+    with ThreadPoolExecutor(5) as tp:
         for data in KuaiShou.datas:
             tp.submit(saveToFile, data)
 
