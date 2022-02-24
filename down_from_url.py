@@ -6,6 +6,7 @@ from tqdm import tqdm  # 进度条模块
 # pathDir = 'G:\\ghs\\hentaiworld.tv'
 pathDir = 'G:\\ghs\\ohentai'
 def down_from_url(urlAndDst):
+    """mp4下载"""
     urlAndDstList = urlAndDst.split('##')
     url = urlAndDstList[1]
     dst = pathDir+ '\\'+urlAndDstList[0] + '.mp4'

@@ -214,5 +214,4 @@ if __name__ == '__main__':
         'PATH_DIR': PATH_DIR,
         'PATHTSDIR': PATHTSDIR
     }
-    print()
     downloadM3u8.downloadOfm3u8(data=data)

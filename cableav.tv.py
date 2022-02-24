@@ -1,27 +1,28 @@
 from xvideo import downloadM3u8
 from lxml import etree
 import requests
-from concurrent.futures import ThreadPoolExecutor
 from configCableavTv import *
 
 PATHTSDIR = r'E:\ts\CableavTv'
 PATH_DIR = r'G:\ghs\CableavTv\Avove'
+
+
 class CableavTv(object):
     data_list = []
 
     @staticmethod
-    def getDetailUrl(url,pages=1):
+    def getDetailUrl(url, pages):
         """
         获取详情页地址和标题
         :param url:
         :param pages:
         :return:
         """
-        detaiLUrlList  = []
-        for page in range(1,int(pages)+1):
-            # URL = url + 'page/'+str(page)+ '/'
-            URL = url
-            res = requests.get(URL,headers=HEADERS)
+        detaiLUrlList = []
+        print('正在获取视频详细页列表...')
+        for page in range(1, int(pages) + 1):
+            URL = url + 'page/'+str(page)+ '/'
+            res = requests.get(URL, headers=HEADERS)
             if res.status_code == 200:
                 pageText = res.text
                 tree = etree.HTML(pageText)
@@ -29,10 +30,10 @@ class CableavTv(object):
                 for article in articleList:
                     detailUrl = article.xpath('./a/@href')
                     title = article.xpath('./a/@title')
-                    if len(detailUrl)>0 and len(title)>0:
+                    if len(detailUrl) > 0 and len(title) > 0:
                         dataDetailUrl = {
                             'detailUrl': detailUrl[0],
-                            'title':title[0]
+                            'title': title[0]
                         }
                         detaiLUrlList.append(dataDetailUrl)
         return detaiLUrlList
@@ -61,11 +62,11 @@ class CableavTv(object):
             videoTitle = tree.xpath('/html/head/title/text()')
             # videoUrl = re.compile('source src=\"(.*?)\"').findall(pageText)
             videoUrl = tree.xpath('/html/head/meta[4]/@content')
-            if len(videoTitle)>0 and len(videoUrl)>0:
+            if len(videoTitle) > 0 and len(videoUrl) > 0:
                 data = {
-                    'PATHTSDIR':PATHTSDIR,
-                    'PATH_DIR':PATH_DIR,
-                    'videoName': videoTitle[0].replace('- CableAV','').strip(),
+                    'PATHTSDIR': PATHTSDIR,
+                    'PATH_DIR': PATH_DIR,
+                    'videoName': videoTitle[0].replace('- CableAV', '').strip(),
                     'url_m3u8': videoUrl[0]
                 }
 
@@ -76,7 +77,8 @@ class CableavTv(object):
 def main():
     # 'https://cableav.tv/playlist/r111qLRtz8j/'
     url = input('输入链接地址：')
-    detaiLUrlList = CableavTv.getDetailUrl(url=url)
+    pages = input('输入下载总页数：')
+    detaiLUrlList = CableavTv.getDetailUrl(url=url,pages=pages)
     if len(detaiLUrlList) > 0:
         res_list = []
         for row in detaiLUrlList:
@@ -101,5 +103,5 @@ def main():
 
 if __name__ == '__main__':
     PATHTSDIR = r'E:\ts\CableavTv'
-    PATH_DIR = r'G:\ghs\CableavTv\極品推特生物老師 闵兒 自演劇情誘惑'
+    PATH_DIR = r'G:\ghs\CableavTv\高顏值主播 一庫 小一一 微信福利 絲襪 紫薇 淫語'
     main()
