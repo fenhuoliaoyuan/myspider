@@ -1,3 +1,5 @@
+import re
+
 from xvideo import downloadM3u8
 from lxml import etree
 import requests
@@ -61,13 +63,15 @@ class CableavTv(object):
             tree = etree.HTML(pageText)
             videoTitle = tree.xpath('/html/head/title/text()')
             # videoUrl = re.compile('source src=\"(.*?)\"').findall(pageText)
-            videoUrl = tree.xpath('/html/head/meta[4]/@content')
+            # videoUrl = tree.xpath('/html/head/meta[4]/@content')
+            videoUrls = re.compile('"source_file":"(.*?)"}').findall(pageText)
+            videoUrl = videoUrls[-1].replace('\\','')
             if len(videoTitle) > 0 and len(videoUrl) > 0:
                 data = {
                     'PATHTSDIR': PATHTSDIR,
                     'PATH_DIR': PATH_DIR,
                     'videoName': videoTitle[0].replace('- CableAV', '').strip(),
-                    'url_m3u8': videoUrl[0]
+                    'url_m3u8': videoUrl
                 }
 
                 cls.data_list.append(data)
@@ -103,5 +107,5 @@ def main():
 
 if __name__ == '__main__':
     PATHTSDIR = r'E:\ts\CableavTv'
-    PATH_DIR = r'G:\ghs\CableavTv\高顏值主播 一庫 小一一 微信福利 絲襪 紫薇 淫語'
+    PATH_DIR = r'G:\ghs\CableavTv\虎牙主播 長腿兮兮 直播熱舞誘惑'
     main()
