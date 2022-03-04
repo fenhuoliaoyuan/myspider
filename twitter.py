@@ -6,10 +6,11 @@ import requests
 from concurrent.futures import ThreadPoolExecutor
 from configTwitter import *
 
-
 # class TwitterPhotosDownload(object):
 #     
 video_updates = []
+
+
 class TwitterMediaDownload(object):
     data_list = []
 
@@ -71,7 +72,7 @@ class TwitterMediaDownload(object):
                             videoUrl = ''
                             videoUrls = legacy['extended_entities']['media'][0]['video_info']['variants']  # [1]['url']
                             videoUrls = [i for i in videoUrls if i['content_type'] == 'video/mp4']
-                            videoUrls = sorted(videoUrls,key = lambda e:e['bitrate'],reverse = True)
+                            videoUrls = sorted(videoUrls, key=lambda e: e['bitrate'], reverse=True)
                             videoUrl = videoUrls[0]['url']
                             # print(videoUrl)
                             # for row i
@@ -234,27 +235,64 @@ def update():
             TwitterMediaDownload.data_list = []
             user_id = row.split('@')[-1]
             path_user = row
-            print('更新'+path_user.split('\\')[-1].split('@')[0])
+            print('更新' + path_user.split('\\')[-1].split('@')[0])
             downloadInf(user_id=user_id, path_user=path_user)
 
 
+def updateOneOf():
+    userlist = []
+    while True:
+        user_name = input('例如：REDZ-PMV,不输入请回车\n输入用户名：')
+        if len(user_name) > 0:
+            userlist.append(user_name)
+        else:
+            break
+    for user_name in userlist:
+        file = [i for i in os.listdir(PATH_DIR) if user_name in i]
+        if len(file) > 0:
+            file = file[0]
+            if '@' in file:
+                user_id = file.split('@')[-1]
+                path_user = PATH_DIR + '\\' + file
+                TwitterMediaDownload.data_list = []
+                downloadInf(user_id=user_id, path_user=path_user)
+
+
 def add_user():
-    user_id = input('列如：1093330681764212737\n输入用户id：')
-    path_user = PATH_DIR + '\\' + input('例如：REDZ-PMV\n输入用户名：') + '@'+user_id
-    TwitterMediaDownload.data_list = []
-    downloadInf(user_id=user_id,path_user=path_user)
+    userData = []
+    while True:
+        user_id = input('例如：1093330681764212737,不输入请回车\n输入用户id：')
+        user_name = input('例如：REDZ-PMV,不输入请回车\n输入用户名：')
+        if len(user_name) > 0 and len(user_id) > 0:
+            data = {
+                'user_id': user_id,
+                'user_name': user_name
+            }
+            userData.append(data)
+        else:
+            break
+    if len(userData) > 0:
+        for data in userData:
+            user_id = data['user_id']
+            user_name = data['user_name']
+            path_user = PATH_DIR + '\\' + user_name + '@' + user_id
+            TwitterMediaDownload.data_list = []
+            downloadInf(user_id=user_id, path_user=path_user)
+
+
 def main():
     while True:
-        num = input('选择添加目标用户请输入1\n选择更新已有用户视频请输入2\n选择退出请输入q\n')
+        num = input('选择添加目标用户请输入1\n选择更新已有个别用户视频请输入2\n选择更新已有所有用户视频请输入3\n选择退出请输入q\n')
         if num == '1':
             add_user()
         elif num == '2':
+            updateOneOf()
+        elif num == '3':
             update()
         elif num == 'q':
             break
         else:
             print('输入错误，请重新输入\n')
-
 
 
 if __name__ == '__main__':
