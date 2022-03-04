@@ -71,6 +71,7 @@ class TwitterMediaDownload(object):
                             videoUrl = ''
                             videoUrls = legacy['extended_entities']['media'][0]['video_info']['variants']  # [1]['url']
                             videoUrls = [i for i in videoUrls if i['content_type'] == 'video/mp4']
+                            videoUrls = sorted(videoUrls,key = lambda e:e['bitrate'],reverse = True)
                             videoUrl = videoUrls[0]['url']
                             # print(videoUrl)
                             # for row i
@@ -238,8 +239,9 @@ def update():
 
 
 def add_user():
-    user_id = input('输入用户id：')
-    path_user = PATH_DIR + '\\' + input('输入用户名：') + '@'+user_id
+    user_id = input('列如：1093330681764212737\n输入用户id：')
+    path_user = PATH_DIR + '\\' + input('例如：REDZ-PMV\n输入用户名：') + '@'+user_id
+    TwitterMediaDownload.data_list = []
     downloadInf(user_id=user_id,path_user=path_user)
 def main():
     while True:
