@@ -202,7 +202,7 @@ class downloadM3u8(object):
                         # ts_list = [yuMing + '/'.join(m3u8_.split('/')[:-1]) + '/' + i.split('/')[-1] for i in ts_list]
                         cls.tq = tqdm(total=len(ts_list))
                         while len(list_ts_file) < len(ts_list):
-                            with ThreadPoolExecutor(4) as tp:
+                            with ThreadPoolExecutor(10) as tp:
                                 for ts_url in ts_list:
                                     tp.submit(cls.download_2, ts_url)
                                     list_ts_file = os.listdir(cls.PATHTSDIR)

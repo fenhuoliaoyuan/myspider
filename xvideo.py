@@ -174,7 +174,7 @@ class downloadM3u8(object):
                         # ts_list = [yuMing + '/'.join(m3u8_.split('/')[:-1]) + '/' + i.split('/')[-1] for i in ts_list]
                         cls.tq = tqdm(total=len(ts_list))
                         while len(list_ts_file) < len(ts_list):
-                            with ThreadPoolExecutor(10) as tp:
+                            with ThreadPoolExecutor(4) as tp:
                                 for ts_url in ts_list:
                                     tp.submit(cls.download_2, ts_url)
                                     list_ts_file = os.listdir(cls.PATHTSDIR)
@@ -203,10 +203,8 @@ class downloadM3u8(object):
 
 if __name__ == '__main__':
     PATHTSDIR = r'E:\tsAvolTv'
-    PATH_DIR = r'G:\ghs\未分类'
-    videoName = input('输入番号名称：').replace(':', '_').replace('/', '_').replace('!', '_').replace('?', '_').replace('|',
-                                                                                                                 '_').replace(
-        '*', '_').replace('\n', '')
+    PATH_DIR = r'G:\ghs\番号'
+    videoName = input('输入番号名称：').replace(':', '_').replace('/', '_').replace('!', '_').replace('?', '_').replace('|','_').replace('*', '_').replace('\n', '')
     url_m3u8 = input('输入m3u8地址：')
     data = {
         'videoName': videoName,

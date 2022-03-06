@@ -28,7 +28,7 @@ class TwitterMediaDownload(object):
             'withReactionsMetadata': True,
             'withReactionsPerspective': True,
             'withSuperFollowsTweetFields': True,
-            'withVoice': True,
+            'withVoice': True
         }
         url = f'https://twitter.com/i/api/graphql/Qg0jD2d__FhsMB48vKFKUQ/UserTweets?variables={quote(json.dumps(params, separators=(",", ":")))}'
         return url

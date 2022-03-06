@@ -147,7 +147,7 @@ def downloadDouYin():
     print('用户名：' + user_name)
     print("抓取的视频长度：" + str(len(url_detail_list)))
     print('开始下载视频>>>')
-    with ThreadPoolExecutor(5) as tp:
+    with ThreadPoolExecutor(10) as tp:
         for url in url_detail_list:
             data = {
                 'url': 'https:' + url,

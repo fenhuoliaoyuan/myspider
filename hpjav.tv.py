@@ -34,10 +34,10 @@ def get_mp4(url, video_name, path_dir):
 
 if __name__ == '__main__':
     # while True:
-    url = 'https://www1418.ff-03.com/token=Z-HXoIIvU8dwXTsP3DuEMQ/1638817737/103.152.0.0/16/b/1a/e11abf8424ceb3a3a8bd76c703bb11ab-720p.mp4'
-    video_name = ''
+    url = 'https://str17.vidoza.net/nvl4ctd4s4eeieno3ubrhw52heqkutxwee2i6na4425klwftxjs6h26je33q/v.mp4'
+    video_name = 'ipz-390'
     ''
-    path_dir = 'F:\番号'
+    path_dir = 'D:\hhh\未分类'
     # url = input('输入mp4地址：')
     # video_name = input('输入影片名：')
     # path_dir = r'F:\番号'

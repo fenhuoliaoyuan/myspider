@@ -224,10 +224,8 @@ class downloadM3u8(object):
 
 if __name__ == '__main__':
     PATHTSDIR = r'E:\tsAvolTv'
-    PATH_DIR = r'G:\ghs\番号'
-    videoName = input('输入番号名称：').replace(':', '_').replace('/', '_').replace('!', '_').replace('?', '_').replace('|',
-                                                                                                                 '_').replace(
-        '*', '_').replace('\n', '')
+    PATH_DIR = r'F:\ghs\福利姬'
+    videoName = input('输入番号名称：').replace(':', '_').replace('/', '_').replace('!', '_').replace('?', '_').replace('|','_').replace('*', '_').replace('\n', '')
     url_m3u8 = input('输入m3u8地址：')
     data = {
         'videoName': videoName,

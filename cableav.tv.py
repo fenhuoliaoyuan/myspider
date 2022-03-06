@@ -107,5 +107,5 @@ def main():
 
 if __name__ == '__main__':
     PATHTSDIR = r'E:\ts\CableavTv'
-    PATH_DIR = r'G:\ghs\CableavTv\虎牙主播 長腿兮兮 直播熱舞誘惑'
+    PATH_DIR = r'G:\ghs\CableavTv\王动御用模特李蒽熙大尺度啪啪流出'
     main()

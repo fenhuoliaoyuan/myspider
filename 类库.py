@@ -1,6 +1,8 @@
 import random
 import config
 import requests
+
+
 def get_ips():
     ips_ = config.conn_ip
     IPs = ips_.smembers('ip_proxies_good')
@@ -15,6 +17,8 @@ def get_ips():
 
 
 ips = get_ips()
+
+
 def get_ips():
     ips_ = config.conn_ip
     IPs = ips_.smembers('ip_proxies_good')
@@ -30,6 +34,7 @@ def get_ips():
 
 ips = get_ips()
 user_agent_list = config.user_agent_list
+
 
 def get_page_text_jiajin(url_jiajin_, acount):
     proxies = random.choice(ips)
