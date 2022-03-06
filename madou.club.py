@@ -189,7 +189,7 @@ def download(data):
                                 # print(j)
                                 os.remove(j)
                             print('ts删除完成')
-                            fanhao_zhangma(path_root)
+                            fanhao_zhangma(path_dir)
                             end_time = int(time.time())
                             time_all = end_time - start_time
                             print('执行时间为：' + str(time_all) + 's')
