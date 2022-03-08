@@ -5,12 +5,7 @@ from urllib.parse import quote
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from configTwitter import *
-
-# class TwitterPhotosDownload(object):
-#     
 video_updates = []
-
-
 class TwitterMediaDownload(object):
     data_list = []
 
@@ -118,29 +113,36 @@ class TwitterMediaDownload(object):
                         except:
                             photoTitle = None
                         try:
-                            photoUrls = legacy['entities']['media']
+                            # photoUrls = legacy['entities']['media']
+                            # 使用extended_entities更好些
+                            photoUrls = legacy['extended_entities']['media']
                             # photoUrl = legacy['entities']['media'][0]['media_url_https']
                         except:
                             photoUrls = None
                         if len(photoTitle) > 0 and len(photoUrls) > 0:
                             if len(photoUrls) > 1:
                                 for i in photoUrls:
-                                    photoUrl = i['media_url_https']
-                                    photoTitle = photoTitle + ' ' + photoUrl.split('/')[-1].replace('.jpg', '')
+                                    # 排除抓取到视频封面的情况
+                                    keys = list(i.keys())
+                                    if 'video_info' not in keys:
+                                        photoUrl = i['media_url_https']
+                                        photoTitle = photoTitle + ' ' + photoUrl.split('/')[-1].replace('.jpg', '')
+                                        data = {
+                                            'photoTitle': photoTitle,
+                                            'photoUrl': photoUrl
+                                        }
+                                        cls.data_list.append(data)
+                                        photoTitle = photoTitle.replace(
+                                            ' ' + photoUrl.split('/')[-1].replace('.jpg', ''),
+                                            '')
+                            else:
+                                if 'video_info' not in list(photoUrls[0].keys()):
+                                    photoUrl = photoUrls[0]['media_url_https']
                                     data = {
                                         'photoTitle': photoTitle,
                                         'photoUrl': photoUrl
                                     }
                                     cls.data_list.append(data)
-                                    photoTitle = photoTitle.replace(' ' + photoUrl.split('/')[-1].replace('.jpg', ''),
-                                                                    '')
-                            else:
-                                photoUrl = photoUrls[0]['media_url_https']
-                                data = {
-                                    'photoTitle': photoTitle,
-                                    'photoUrl': photoUrl
-                                }
-                                cls.data_list.append(data)
 
                     except:
                         pass
@@ -162,9 +164,7 @@ class TwitterMediaDownload(object):
         if 'videoUrl' in data.keys():
             videoTitle = data['videoTitle']
             videoUrl = data['videoUrl']
-            path_mp4 = path_user + '\\' + 'Videos' + '\\' + videoTitle.replace(':', '_').replace('/', '_').replace('!',
-                                                                                                                   '_').replace(
-                '?', '_').replace('|', '_').replace('*', '_') + '.mp4'
+            path_mp4 = path_user + '\\' + 'Videos' + '\\' + format_str(videoTitle) + '.mp4'
             if not os.path.exists(path_mp4):
                 mp4Bytes = requests.get(url=videoUrl, headers=headers)
                 if mp4Bytes.status_code == 200:
@@ -175,15 +175,22 @@ class TwitterMediaDownload(object):
         elif 'photoTitle' in data.keys():
             photoTitle = data['photoTitle']
             photoUrl = data['photoUrl']
-            path_jpg = path_user + '\\' + 'Photos' + '\\' + photoTitle.replace(':', '_').replace('/', '_').replace('!',
-                                                                                                                   '_').replace(
-                '?', '_').replace('|', '_').replace('*', '_') + '.jpg'
+            # if photoUrl.split('.')[-1] == 'jpg':
+            path_jpg = path_user + '\\' + 'Photos' + '\\' + format_str(photoTitle) + '.jpg'
+            # gif动图地址传递过来时是MP4
+            # elif photoUrl.split('.')[-1] == 'gif':
+            #     path_jpg = path_user + '\\' + 'Photos' + '\\' + format_str(photoTitle) + '.gif'
             if not os.path.exists(path_jpg):
                 jpgBytes = requests.get(url=photoUrl, headers=headers)
                 if jpgBytes.status_code == 200:
                     with open(path_jpg, 'wb') as wb:
                         wb.write(jpgBytes.content)
-                        print(photoTitle + '.jpg' + '下载完成')
+                        print(photoTitle + '.' + photoUrl.split('.')[-1] + '下载完成')
+
+
+def format_str(str_mabge):
+    return str_mabge.replace('.', ' ').replace('?', ' ').replace('\n', ' ').replace('|', ' ').replace(':', ' ').replace(
+        '!', ' ').replace('/', ' ').replace('\\', ' ').replace('*', ' ').replace('<', ' ').replace('>', ' ')
 
 
 def downloadInf(user_id, path_user):
@@ -242,7 +249,7 @@ def update():
 def updateOneOf():
     userlist = []
     while True:
-        user_name = input('例如：REDZ-PMV,不输入请回车\n输入用户名：')
+        user_name = format_str(input('例如：REDZ-PMV,不输入请回车\n输入用户名：'))
         if len(user_name) > 0:
             userlist.append(user_name)
         else:
@@ -262,7 +269,7 @@ def add_user():
     userData = []
     while True:
         user_id = input('例如：1093330681764212737,不输入请回车\n输入用户id：')
-        user_name = input('例如：REDZ-PMV,不输入请回车\n输入用户名：')
+        user_name = format_str(input('例如：REDZ-PMV,不输入请回车\n输入用户名：'))
         if len(user_name) > 0 and len(user_id) > 0:
             data = {
                 'user_id': user_id,
