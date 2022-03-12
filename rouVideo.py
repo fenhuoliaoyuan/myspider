@@ -77,10 +77,10 @@ class RouVideo(object):
                 return cls.data_list
 
 
-def main():
+def rouVideoDownload():
     # 'https://rou.video/t/%E6%9D%8F%E5%90%A7'
-    url = input('输入链接地址：')
-    pages = input('输入下载的页数：')
+    url = input('例如：https://rou.video/t/%E6%9D%8F%E5%90%A7 \n输入链接地址：')
+    pages = input('输入下载的总页数：')
     detaiLUrlList = RouVideo.getDetailUrl(url=url, pages=pages)
     if len(detaiLUrlList) > 0:
         res_list = []
@@ -103,8 +103,27 @@ def main():
                 for data in datasList:
                     downloadM3u8.downloadOfm3u8(data)
 
+def downloadOne():
+    RouVideo.data_list = []
+    url = input('例如：https://rou.video/v/ckvknyuih001211g43tc310h1\n输入视频播放页地址：')
+    res = RouVideo.response(url)
+    if res.status_code == 200:
+        RouVideo.parseResponse(res)
+        if len(RouVideo.data_list) > 0:
+            downloadM3u8.downloadOfm3u8(RouVideo.data_list[0])
+def main():
+    while True:
+        num = input('选择下载单个视频请输入1\n选择批量下载视频列表请输入2\n选择退出请输入q\n')
+        if num == '1':
+            downloadOne()
+        elif num == '2':
+            rouVideoDownload()
+        elif num == 'q':
+            break
+        else:
+            print('输入错误，请重新输入\n')
 
 if __name__ == '__main__':
     PATHTSDIR = r'E:\tsAvolTv'
-    PATH_DIR = r'G:\ghs\国产\杏吧'
+    PATH_DIR = r'G:\ghs\未分类'
     main()
