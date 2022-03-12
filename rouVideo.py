@@ -25,6 +25,10 @@ class RouVideo(object):
                 'order': 'createdAt',
                 'page': page,
             }
+            if 'search' == url.split('/')[-1].split('?')[0]:
+                params = {
+                    'page': page
+                }
             res = requests.get(URL, headers=HEADERS, params=params)
             if res.status_code == 200:
                 pageText = res.text
@@ -103,6 +107,7 @@ def rouVideoDownload():
                 for data in datasList:
                     downloadM3u8.downloadOfm3u8(data)
 
+
 def downloadOne():
     RouVideo.data_list = []
     url = input('例如：https://rou.video/v/ckvknyuih001211g43tc310h1\n输入视频播放页地址：')
@@ -111,17 +116,49 @@ def downloadOne():
         RouVideo.parseResponse(res)
         if len(RouVideo.data_list) > 0:
             downloadM3u8.downloadOfm3u8(RouVideo.data_list[0])
+
+
+def downloadSearch():
+    RouVideo.data_list = []
+    word = input('输入你要添加的搜索词：')
+    url = 'https://rou.video/search?q=' + word
+    detaiLUrlList = RouVideo.getDetailUrl(url, pages=5)
+    detaiLUrlList = [i for i in detaiLUrlList if len(re.compile(word).findall(i['title'])) > 0]
+    res_list = []
+    for row in detaiLUrlList:
+        res = RouVideo.response(url=row['detailUrl'])
+        if res is not None:
+            res_list.append(res)
+    if len(res_list) > 0:
+        datasList = []
+        for res in res_list:
+            datas = RouVideo.parseResponse(response=res)
+            if datas is not None:
+                datasList.extend(datas)
+        if len(datasList) > 0:
+            # dict的去重
+            datasList = [dict(t) for t in set([tuple(d.items()) for d in datasList])]
+            print("抓取的视频列表长度：" + str(len(datasList)))
+            print('开始下载视频>>>')
+            # with ThreadPoolExecutor(1) as tp:
+            for data in datasList:
+                downloadM3u8.downloadOfm3u8(data)
+
+
 def main():
     while True:
-        num = input('选择下载单个视频请输入1\n选择批量下载视频列表请输入2\n选择退出请输入q\n')
+        num = input('选择下载单个视频请输入1\n选择批量下载视频列表请输入2\n选择下载固定搜索词的批量下载功能请输入3\n选择退出请输入q\n')
         if num == '1':
             downloadOne()
         elif num == '2':
             rouVideoDownload()
+        elif num == '3':
+            downloadSearch()
         elif num == 'q':
             break
         else:
             print('输入错误，请重新输入\n')
+
 
 if __name__ == '__main__':
     PATHTSDIR = r'E:\tsAvolTv'
