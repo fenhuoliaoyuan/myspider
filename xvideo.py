@@ -6,7 +6,10 @@ from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
 from configXvideo import *
 from tools import *
-
+"""
+大多数m3u8链接的下载爬虫：
+Xvideo,pornhub,jable.tv等
+"""
 
 class downloadM3u8(object):
     cryptor = ''
@@ -15,6 +18,7 @@ class downloadM3u8(object):
     PATHTSDIR = ''
     @staticmethod
     def createDir(PATH_DIR):
+        """创建路径"""
         pathList = PATH_DIR.split('\\')
         path_dir = ''
         for i in range(0, len(pathList)):
