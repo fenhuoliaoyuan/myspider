@@ -1,10 +1,11 @@
 import random
-
+import requests
 # redis连接
 from redis import Redis
 conn = Redis(host='localhost', port=6379, db=0)
 conn_1 = Redis(host='localhost', port=6379,db=1)
 conn_ip = Redis(host='localhost', port=6379,db=1)
+conn_2 = Redis(host='localhost', port=6379,db=2)
 
 # mongodb连接
 import pymongo
@@ -20,11 +21,31 @@ db_Tencent = client.Tencent
 spider_tencent = db_Tencent['spider_tencent']
 # MONGO_URL : ''
 
+
 # 生成随机头
 fake = Faker()
 headers ={'User-Agent':fake.user_agent()}
+zhihu_url = 'https://www.zhihu.com/question/24385418'
+username = '13726941966'
+password = 'L15900145626'
+path_root = 'C:\github\zhihu\验证码图片'
+ak = 'KkgPyCGye67I0DdCDvbctqEO'
+sk = 'U7HGj6pqiEQ68msX7HcKYOD5UboyeQUO'
+baidu_api_url = 'https://aip.baidubce.com/rpc/2.0/ai_custom/v1/detection/myzhihu_0'
 
-
+URL_list = []
+# ips = proxies.Proxy()
+def get_ips():
+    ips_ = conn_ip
+    IPs = ips_.smembers('ip_proxies_good')
+    ips__ = []
+    for IP in IPs:
+        ip = bytes.decode(IP)
+        # ips__.append({'http': ip,'https':'https://'+ip.split('/')[-1]})
+        # ips__.append({'https': 'https://' + ip.split('/')[-1]})
+        ips__.append({'http': ip})
+    return ips__
+ips = get_ips()
 
 user_agent_list = (
     "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
@@ -261,7 +282,198 @@ def get_ua():
         "Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.11 (KHTML, like Gecko) Ubuntu/11.10 Chromium/17.0.963.65 Chrome/17.0.963.65 Safari/535.11",
         "Mozilla/5.0 (X11; Linux i686) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.65 Safari/535.11",
     ]
-    return {'user-agent': random.choice(user_agent_list)}
+    return user_agent_list
+session = requests.Session()
+def get_page_text_jiajin(url_jiajin_,acount):
+    proxies = random.choice(ips)
+    # print(proxies)
+    try:
+        headers = {
+            'user-agent': random.choice(user_agent_list)
+        }
+        # if acount == 10:
+        #     session.get(url='https://g0527.91p47.com/index.php', headers=headers, proxies=proxies)
+
+        page_text_jiajin = session.get(url=url_jiajin_,headers=headers, proxies=proxies)
+        if page_text_jiajin.status_code != 200:
+            raise ValueError
+        page_text_jiajin = page_text_jiajin.text
+    except:
+        ips.remove(proxies)
+        # config.conn_1.srem('ip_proxies', proxies['http'])
+        # print('redis删除无用IP成功-{}'.format(proxies['http']))
+        print('删除连接超时Ip---{}-get_page_text_jiajin'.format(proxies))
+        # print('ip池中ip个数还有{}'.format(len(ips)))
+        if acount == 10:
+            # print()
+            return
+        acount += 1
+        # print('重试中...')
+        get_page_text_jiajin(url_jiajin_,acount)
+    else:
+        return page_text_jiajin
+def get_page_text_jiajin_(url_jiajin_detail,acount):
+    proxies = random.choice(ips)
+    # print(proxies)
+    try:
+        headers = {
+            'user-agent': random.choice(user_agent_list)
+        }
+        # if acount == 10:
+        #     session.get(url='https://g0527.91p47.com/index.php', headers=headers, proxies=proxies)
+        page_text_jiajin_ = session.get(url=url_jiajin_detail,headers=headers,proxies=proxies)
+        if page_text_jiajin_.status_code != 200:
+            raise ValueError
+        page_text_jiajin_ = page_text_jiajin_.text
+    except:
+        ips.remove(proxies)
+        # config.conn_1.srem('ip_proxies', proxies['http'])
+        # print('redis删除无用IP成功-{}'.format(proxies['http']))
+        print('删除连接超时Ip---{}-get_page_text_jiajin'.format(proxies))
+        # print('ip池中ip个数还有{}'.format(len(ips)))
+        if acount == 10:
+            # print()
+            return
+        acount += 1
+        # print('重试中...')
+        get_page_text_jiajin_(url_jiajin_detail,acount)
+    else:
+        return page_text_jiajin_
+
+def get_page_text(url,acount):
+    proxies = random.choice(ips)
+    # print(proxies)
+    try:
+        headers = {
+            'user-agent': random.choice(user_agent_list)
+        }
+        # if acount == 10:
+        #     session.get(url='https://g0527.91p47.com/index.php', headers=headers, proxies=proxies)
+        page_text = session.get(url=url, headers=headers,proxies=proxies)
+        if page_text.status_code != 200:
+            raise ValueError
+    except:
+        # ips.remove(proxies)
+        # config.conn_1.srem('ip_proxies', proxies['http'])
+        # print('redis删除无用IP成功-{}'.format(proxies['http']))
+        # print('删除连接超时Ip---{}-get_page_text'.format(proxies))
+        # print('ip池中ip个数还有{}'.format(len(ips)))
+        if acount == 10:
+            # print()
+            return
+        acount += 1
+        # print('重试中...')
+        get_page_text(url,acount)
+    else:
+        return page_text
+
+def get_page_text_detail(url_detail,acount):
+    proxies = random.choice(ips)
+    # print(proxies)
+    try:
+        headers = {
+            'user-agent': random.choice(user_agent_list)
+        }
+        # if acount == 3:
+        #     session.get(url='https://g0527.91p47.com/index.php', headers=headers, proxies=proxies)
+        page_text_detail = session.get(url=url_detail, headers=headers,proxies=proxies)
+        if page_text_detail.status_code != 200:
+            raise ValueError
+    except:
+        ips.remove(proxies)
+        # config.conn_1.srem('ip_proxies', proxies['http'])
+        # print('redis删除无用IP成功-{}'.format(proxies['http']))
+        print('删除连接超时Ip---{}-get-page_text_detail'.format(proxies))
+        # print('ip池中ip个数还有{}'.format(len(ips)))
+        if acount == 10:
+            # print()
+            return
+        acount += 1
+        # print('重试中...')
+        get_page_text_detail(url_detail,acount)
+    else:
+        return page_text_detail
+
+def get_m3u8(m3u8_url,acount):
+    proxies = random.choice(ips)
+    # print(proxies)
+    try:
+        headers = {
+            'user-agent': random.choice(user_agent_list)
+        }
+        # if acount == 2:
+        #     session.get(url='https://g0527.91p47.com', headers=headers, proxies=proxies)
+        m3u8 = session.get(url=m3u8_url,headers=headers,proxies=proxies)
+        if m3u8.status_code != 200:
+            raise ValueError
+    except:
+        ips.remove(proxies)
+        # config.conn_1.srem('ip_proxies', proxies['http'])
+        # print('redis删除无用IP成功-{}'.format(proxies['http']))
+        print('删除连接超时Ip---{}-get_m3u8'.format(proxies))
+        # print('ip池中ip个数还有{}'.format(len(ips)))
+        if acount == 5:
+            # print('该视频地址应该为mp4,跳过')
+            return
+        acount += 1
+        # print('重试中...')
+        get_m3u8(m3u8_url,acount)
+    else:
+        return m3u8
+
+def get_ts(url_ts_,acount):
+    try:
+        proxies = random.choice(ips)
+        headers = {
+            'user-agent': random.choice(user_agent_list)
+        }
+        # if acount == 10:
+        #     session.get(url='https://g0527.91p47.com/index.php', headers=headers, proxies=proxies)
+        ts = session.get(url=url_ts_, proxies=proxies,headers=headers)
+        if ts.status_code != 200:
+            raise ValueError
+    except:
+        # ips.remove(proxies)
+        # config.conn_1.srem('ip_proxies', proxies['http'])
+        # print('redis删除无用IP成功-{}'.format(proxies['http']))
+        # print('删除连接超时Ip---{}-get_ts'.format(proxies))
+        # print('ip池中ip个数还有{}'.format(len(ips)))
+        if acount == 10:
+            # print()
+            return
+        # if acount == 2:
+        #     session.get(url='https://g0527.91p47.com/index.php', headers=headers, proxies=proxies)
+        acount += 1
+        # print('重试中...')
+        get_ts(url_ts_,acount)
+    else:
+        return ts
+def get_mp4(url_video_mp4,acount):
+    try:
+        proxies = random.choice(ips)
+        headers = {
+            'user-agent': random.choice(user_agent_list)
+        }
+        # if acount == 10:
+        #     session.get(url='https://g0527.91p47.com/index.php', headers=headers, proxies=proxies)
+        # print(proxies)
+        mp4 = session.get(url=url_video_mp4, headers=headers,proxies=proxies)
+        if mp4.status_code != 200:
+            raise ValueError
+    except:
+        ips.remove(proxies)
+        # config.conn_1.srem('ip_proxies',proxies['http'])
+        # print('redis删除无用IP成功-{}'.format(proxies['http']))
+        print('删除连接超时Ip---{}-get_mp4'.format(proxies))
+        # print('ip池中ip个数还有{}'.format(len(ips)))
+        if acount == 10:
+            return
+        acount += 1
+        # print('重试中...')
+        get_mp4(url_video_mp4, acount)
+    else:
+        return mp4
+
 if __name__ == '__main__':
     print(get_ua())
 
