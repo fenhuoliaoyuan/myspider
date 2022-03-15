@@ -1,6 +1,6 @@
 import execjs
 import requests
-from 爬虫小项目 import config
+import config
 import re
 from lxml import etree
 import random
@@ -141,7 +141,7 @@ def get_url_detail(URL):
     bro.get(url=URL)
     scroll_until_loaded(bro)
     tree = etree.HTML(bro.page_source)
-    url_detail_list = tree.xpath('//li[@class="e0fe394964bbd9fef7d310c80353afdd-scss"]/a/@href')
+    url_detail_list = tree.xpath('//li[@class="ECMy_Zdt"]/a/@href')
     user_name = re.compile('(.*?)的个人主页').findall(tree.xpath('//html/head/title/text()')[0])
     return url_detail_list,user_name[0]
 # a = get_url_detail(URL)
@@ -153,7 +153,8 @@ def save_video(url_detail):
     page_text_detail = get_page_text_detail(url_detail=url_detail,acount=0)
     if page_text_detail is not None:
         tree = etree.HTML(page_text_detail.text)
-        name_video = tree.xpath('//html/head/title/text()')[0]
+        name_video = ''.join(tree.xpath('//html/head/title/text()'))
+
         str_ = tree.xpath('//*[@id="RENDER_DATA"]/text()')[0]
         str_json = parse.unquote(str_)
         url_video = 'https:' + re.compile('\"src\":\"(.*?)\"}').findall(str_json)[0]
@@ -197,6 +198,7 @@ if __name__ == '__main__':
     URL_list = config.conn.smembers('douyin_user_url')
     for URL in URL_list:
         URL = bytes.decode(URL)
+        print(type(URL),URL)
         print('正在遍历\n{}'.format(URL))
         # URL = 'https://www.douyin.com/user/MS4wLjABAAAABlpf7-SQrqmCrDunXf1EqjgM-G4QclCIM3x58QZ1zAU?enter_method=video_title&author_id=56391068262&group_id=6981360972640423179&log_pb=%7B%22impr_id%22%3A%222021071100431001021203703717094522%22%7D&enter_from=video_detail'
         url_detail_list,user_name = get_url_detail(URL=URL)

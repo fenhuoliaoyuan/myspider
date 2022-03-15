@@ -4,7 +4,7 @@ import random
 import os
 import time
 from lxml import etree
-from proxies import proxies
+from proxies import proxies_test
 import config
 from tqdm import tqdm
 headers_list = [
@@ -19,36 +19,30 @@ headers_list = [
     { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.193 Safari/537.36'}
 ]
 # ip_list = config.conn_ip.smembers('ip_proxies')
-# def get_page_detail_text(url_detail,acount):
-#     proxies_ = bytes.decode(random.choice(list(ip_list)))
-#     # proxies_ = proxies.replace(r'\\','')
-#     proxies_ = {
-#         'http' : ''
-#     }
-#     try:
-#         page_detail_text = session.get(url=url_detail, headers=header,proxies=dict(proxies),timeout=2).text
-#     except:
-#         print('重连.......')
-#         config.conn_ip.srem('ip_proxies',proxies)
-#         if acount == 10:
-#             return
-#         acount += 1
-#         page_detail_text = get_page_detail_text(url_detail,acount)
-
-    # return page_detail_text
+def get_ips():
+    ips = config.conn_ip
+    IPs = ips.smembers('ip_proxies')
+    ips = []
+    for IP in IPs:
+        ip = bytes.decode(IP)
+        ips.append({'http': ip })
+    return ips
+ips = get_ips()
 def get_img(src,acount):
     # proxies = bytes.decode(random.choice(list(ip_list)))
+    proxies = random.choice(ips)
     try:
-        img = session.get(url=src, headers=header,proxies=random.choice(ips),timeout = 2).content
+        img = session.get(url=src, headers=header,proxies=proxies,timeout = 2).content
     except:
+        ips.remove(proxies)
+        print("删除连超时的ip--{}".format(proxies))
         print('重连......')
-        config.conn_ip.srem('ip_proxies',proxies)
         if acount == 10:
             return
         acount += 1
         img = get_img(src,acount)
     return img
-ips = proxies.Proxy()
+# ips = proxies_test.Proxy()
 path_root = 'E:\图虫网\美女'
 url_mainpage = 'https://tuchong.com/tags/%E7%BE%8E%E5%A5%B3?type=new'
 # print(int(time.time()))
@@ -57,6 +51,7 @@ header = random.choice(headers_list)#随机挑选头部，进行UA伪装
 session = requests.Session()#创建Session对象
 session.get(url_mainpage,headers=header)#捕获且存储cookie
 #发现网页用js渲染，查找json文件找到详情页地址
+
 for pages in range(1,100):
     #快速查找到真实地址
     # page: 4

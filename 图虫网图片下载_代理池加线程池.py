@@ -53,7 +53,9 @@ def get_pages(page):
     # count: 20
     # order: new
     # before_timestamp: 1624344502
-    url_true = 'https://tuchong.com/rest/tags/%E7%BE%8E%E5%A5%B3/posts?page={}&count=20&order=new&before_timestamp={}'.format(page,int(time.time()))
+    # https://tuchong.com/rest/tags/%E5%8A%A8%E6%BC%AB/posts?page=2&count=20&order=new&before_timestamp=1625137489
+    # url_true = 'https://tuchong.com/rest/tags/%E7%BE%8E%E5%A5%B3/posts?page={}&count=20&order=new&before_timestamp={}'.format(page,int(time.time()))
+    url_true = 'https://tuchong.com/rest/tags/%E5%8A%A8%E6%BC%AB/posts?page={}&count=20&order=new&before_timestamp={}'.format(page,int(time.time()))
     response_mianpage = session.get(url = url_true,headers = header).json()#得到JSON数据
     # print(response_mianpage)
     response_mianpage_1 = response_mianpage['postList']#取出里面的数组
@@ -89,7 +91,8 @@ def get_pages(page):
             tqdm_.close()
 if __name__ == '__main__':
     ips = get_ips()
-    path_root = 'E:\图虫网\美女'
+    # path_root = 'E:\图虫网\美女'
+    path_root = 'E:\图虫网\动漫'
     url_mainpage = 'https://tuchong.com/tags/%E7%BE%8E%E5%A5%B3?type=new'
     # print(int(time.time()))
     # 动态获取cookie
@@ -98,5 +101,5 @@ if __name__ == '__main__':
     session.get(url_mainpage, headers=header)  # 捕获且存储cookie
     from concurrent.futures import ThreadPoolExecutor
     with ThreadPoolExecutor(50) as tp:
-        for i in range(1,101):
+        for i in range(1,100):
             tp.submit(get_pages,i)
