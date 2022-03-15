@@ -8,7 +8,7 @@ from configXvideo import *
 from tools import *
 """
 大多数m3u8链接的下载爬虫：
-Xvideo,pornhub,jable.tv等
+Xvideo,pornhub,jable.tv等等
 """
 
 class downloadM3u8(object):
