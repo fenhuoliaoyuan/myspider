@@ -5,6 +5,9 @@ from urllib.parse import quote
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from configTwitter import *
+"""
+推特用户视频图片批量下载
+"""
 video_updates = []
 class TwitterMediaDownload(object):
     data_list = []
