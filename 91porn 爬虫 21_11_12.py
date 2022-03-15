@@ -9,7 +9,9 @@ from config import conn
 import random
 import execjs
 from concurrent.futures import ThreadPoolExecutor
-
+"""
+91porn视频批量下载爬虫
+"""
 
 def get_page_text_jiajin(url_jiajin_, acount):
     proxies = random.choice(ips)
