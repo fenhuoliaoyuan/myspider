@@ -10,7 +10,9 @@ from configDouyin import *
 import re
 from tqdm import tqdm
 from lxml import etree
-
+"""
+抖音用户视频批量下载
+"""
 PATH_DIR = r'G:\ghs\douyin'
 
 
