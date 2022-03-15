@@ -5,7 +5,9 @@ import requests
 from tqdm import tqdm
 from configkuaishou import *
 PATH_DIR = r'G:\ghs\快手'
-
+"""
+快手用户视频批量下载爬虫
+"""
 
 class KuaiShou(object):
     datas = []
