@@ -6,10 +6,7 @@ from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor
 from configXvideo import *
 from tools import *
-"""
-大多数m3u8链接的下载爬虫：
-Xvideo,pornhub,jable.tv等等
-"""
+
 
 class downloadM3u8(object):
     cryptor = ''
@@ -18,7 +15,6 @@ class downloadM3u8(object):
     PATHTSDIR = ''
     @staticmethod
     def createDir(PATH_DIR):
-        """创建路径"""
         pathList = PATH_DIR.split('\\')
         path_dir = ''
         for i in range(0, len(pathList)):
@@ -122,7 +118,7 @@ class downloadM3u8(object):
         url_m3u8 = data['url_m3u8']
         cls.PATH_DIR = data['PATH_DIR']
         cls.PATHTSDIR = data['PATHTSDIR']
-        videoName = videoName.replace(':', '_').replace('/', '_').replace('!', '_').replace('?', '_').replace('|','_').replace('*', '_').replace('\n', '').replace('.','_')
+        videoName = videoName.replace(':', ' ').replace('/', ' ').replace('!', ' ').replace('?', ' ').replace('|',' ').replace('*', ' ').replace('\n', '').replace('.',' ').strip()
         cls.createDir(cls.PATH_DIR)
         cls.createDir(cls.PATHTSDIR)
         print(videoName+'下载中...')
@@ -178,7 +174,7 @@ class downloadM3u8(object):
                         # ts_list = [yuMing + '/'.join(m3u8_.split('/')[:-1]) + '/' + i.split('/')[-1] for i in ts_list]
                         cls.tq = tqdm(total=len(ts_list))
                         while len(list_ts_file) < len(ts_list):
-                            with ThreadPoolExecutor(4) as tp:
+                            with ThreadPoolExecutor(6) as tp:
                                 for ts_url in ts_list:
                                     tp.submit(cls.download_2, ts_url)
                                     list_ts_file = os.listdir(cls.PATHTSDIR)
