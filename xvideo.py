@@ -118,93 +118,94 @@ class downloadM3u8(object):
         url_m3u8 = data['url_m3u8']
         cls.PATH_DIR = data['PATH_DIR']
         cls.PATHTSDIR = data['PATHTSDIR']
-        videoName = videoName.replace(':', '_').replace('/', '_').replace('!', '_').replace('?', '_').replace('|','_').replace('*', '_').replace('\n', '').replace('.','_')
+        videoName = videoName.replace(':', ' ').replace('/', ' ').replace('!', ' ').replace('?', ' ').replace('|',' ').replace('*', ' ').replace('\n', '').replace('.',' ').strip()
         cls.createDir(cls.PATH_DIR)
         cls.createDir(cls.PATHTSDIR)
         print(videoName+'下载中...')
         path_name = cls.PATH_DIR + '\\' + videoName + '.ts'
-        dataList = []
-        if len(videoName) > 0 and len(url_m3u8) > 0:
-            data = {
-                "path_name": path_name,
-                "url_m3u8": url_m3u8
-            }
-            dataList.append(data)
-        # while True:
-        #     videoName = input('输入番号名称：').replace(':', '_').replace('/', '_').replace('!', '_').replace('?', '_').replace(
-        #         '|',
-        #         '_').replace(
-        #         '*', '_').replace('\n', '')
-        #     path_name = PATH_DIR + '\\' + videoName + '.ts'
-        #     url_m3u8 = input('输入m3u8地址：')
-        #     if len(videoName) > 0 and len(url_m3u8) > 0:
-        #         data = {
-        #             "path_name": path_name,
-        #             "url_m3u8": url_m3u8
-        #         }
-        #         dataList.append(data)
-        #     else:
-        #         break
-        if len(dataList) > 0:
-            for data in dataList:
-                start_time = int(time.time())
-                path_name = data["path_name"]
-                url_m3u8 = data["url_m3u8"]
-                if not os.path.exists(path_name.replace('.ts', '.mp4')) and not os.path.exists(path_name):
-                    tuple_test = cls.get_cryptor(url_m3u8)
-                    # if len(list(tuple_test)) < 3:
-                    if type(tuple_test) is tuple:
-                        cls.cryptor, ts_list = tuple_test
+        if not os.path.exists(path_name) and not os.path.exists(path_name.replace('.ts','.mp4')):
+            dataList = []
+            if len(videoName) > 0 and len(url_m3u8) > 0:
+                data = {
+                    "path_name": path_name,
+                    "url_m3u8": url_m3u8
+                }
+                dataList.append(data)
+            # while True:
+            #     videoName = input('输入番号名称：').replace(':', '_').replace('/', '_').replace('!', '_').replace('?', '_').replace(
+            #         '|',
+            #         '_').replace(
+            #         '*', '_').replace('\n', '')
+            #     path_name = PATH_DIR + '\\' + videoName + '.ts'
+            #     url_m3u8 = input('输入m3u8地址：')
+            #     if len(videoName) > 0 and len(url_m3u8) > 0:
+            #         data = {
+            #             "path_name": path_name,
+            #             "url_m3u8": url_m3u8
+            #         }
+            #         dataList.append(data)
+            #     else:
+            #         break
+            if len(dataList) > 0:
+                for data in dataList:
+                    start_time = int(time.time())
+                    path_name = data["path_name"]
+                    url_m3u8 = data["url_m3u8"]
+                    if not os.path.exists(path_name.replace('.ts', '.mp4')) and not os.path.exists(path_name):
+                        tuple_test = cls.get_cryptor(url_m3u8)
+                        # if len(list(tuple_test)) < 3:
+                        if type(tuple_test) is tuple:
+                            cls.cryptor, ts_list = tuple_test
 
-                        # tq = tqdm(total=len(ts_list))
-                        # ts_list = [yuMing + '/'.join(m3u8_.split('/')[:-1]) + '/' + i.split('/')[-1] for i in ts_list]
-                        cls.tq = tqdm(total=len(ts_list))
-                        list_ts_file = ''
-                        while len(list_ts_file) < len(ts_list):
-                            with ThreadPoolExecutor(10) as tp:
-                                for ts_url in ts_list:
-                                    tp.submit(cls.download_1, ts_url)
-                                list_ts_file = os.listdir(cls.PATHTSDIR)
-                        cls.tq.close()
-                        print('ts下载完成')
-                    elif type(tuple_test) is list:
-                        ts_list = tuple_test
-                        list_ts_file = ''
-
-                        # ts_list = [yuMing + '/'.join(m3u8_.split('/')[:-1]) + '/' + i.split('/')[-1] for i in ts_list]
-                        cls.tq = tqdm(total=len(ts_list))
-                        while len(list_ts_file) < len(ts_list):
-                            with ThreadPoolExecutor(4) as tp:
-                                for ts_url in ts_list:
-                                    tp.submit(cls.download_2, ts_url)
+                            # tq = tqdm(total=len(ts_list))
+                            # ts_list = [yuMing + '/'.join(m3u8_.split('/')[:-1]) + '/' + i.split('/')[-1] for i in ts_list]
+                            cls.tq = tqdm(total=len(ts_list))
+                            list_ts_file = ''
+                            while len(list_ts_file) < len(ts_list):
+                                with ThreadPoolExecutor(10) as tp:
+                                    for ts_url in ts_list:
+                                        tp.submit(cls.download_1, ts_url)
                                     list_ts_file = os.listdir(cls.PATHTSDIR)
-                        cls.tq.close()
-                        print('ts下载完成')
+                            cls.tq.close()
+                            print('ts下载完成')
+                        elif type(tuple_test) is list:
+                            ts_list = tuple_test
+                            list_ts_file = ''
 
-                    list_ts_file = os.listdir(cls.PATHTSDIR)
-                    if len(list_ts_file) >0:#过滤掉m3u8返回错误的情况
-                        # 弄掉'?'
-                        if '?' in ts_list[0]:
-                            ts_list = [i.split('?')[0] for i in ts_list if '?' in i]
-                        with open(path_name, 'ab') as ab:
-                            for i in [j.split('/')[-1] for j in ts_list]:
-                                with open(cls.PATHTSDIR + '\\' + i, 'rb') as rb:
-                                    ab.write(rb.read())
-                            print(path_name + '合并完成')
-                        for j in [cls.PATHTSDIR + '\\' + i for i in list_ts_file]:
-                            # print(j)
-                            os.remove(j)
-                        print('ts删除完成')
-                        end_time = int(time.time())
-                        time_all = end_time - start_time
-                        print('执行时间为：' + str(time_all) + 's')
-            fanhao_zhangma(cls.PATH_DIR)
+                            # ts_list = [yuMing + '/'.join(m3u8_.split('/')[:-1]) + '/' + i.split('/')[-1] for i in ts_list]
+                            cls.tq = tqdm(total=len(ts_list))
+                            while len(list_ts_file) < len(ts_list):
+                                with ThreadPoolExecutor(4) as tp:
+                                    for ts_url in ts_list:
+                                        tp.submit(cls.download_2, ts_url)
+                                        list_ts_file = os.listdir(cls.PATHTSDIR)
+                            cls.tq.close()
+                            print('ts下载完成')
+
+                        list_ts_file = os.listdir(cls.PATHTSDIR)
+                        if len(list_ts_file) >0:#过滤掉m3u8返回错误的情况
+                            # 弄掉'?'
+                            if '?' in ts_list[0]:
+                                ts_list = [i.split('?')[0] for i in ts_list if '?' in i]
+                            with open(path_name, 'ab') as ab:
+                                for i in [j.split('/')[-1] for j in ts_list]:
+                                    with open(cls.PATHTSDIR + '\\' + i, 'rb') as rb:
+                                        ab.write(rb.read())
+                                print(path_name + '合并完成')
+                            for j in [cls.PATHTSDIR + '\\' + i for i in list_ts_file]:
+                                # print(j)
+                                os.remove(j)
+                            print('ts删除完成')
+                            end_time = int(time.time())
+                            time_all = end_time - start_time
+                            print('执行时间为：' + str(time_all) + 's')
+        fanhao_zhangma(cls.PATH_DIR)
 
 
 if __name__ == '__main__':
-    PATHTSDIR = r'E:\tsAvolTv'
-    PATH_DIR = r'G:\ghs\番号'
-    videoName = input('输入番号名称：').replace(':', '_').replace('/', '_').replace('!', '_').replace('?', '_').replace('|','_').replace('*', '_').replace('\n', '')
+    PATHTSDIR = r'E:\ts\tsXvideo'
+    PATH_DIR = r'G:\ghs\番号\骑兵'
+    videoName = input('输入番号名称：').replace(':', '：').replace('/', ' ').replace('!', '！').replace('?', '？').replace('|',' ').replace('*', ' ').replace('\n', ' ')
     url_m3u8 = input('输入m3u8地址：')
     data = {
         'videoName': videoName,
